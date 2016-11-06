@@ -1,0 +1,7 @@
+Instructions for assign1 folder for Computational Methods (TSM CDT):
+
+Using the Makefile provided, type 'make' into the terminal. This will compile
+the file 'machine.cpp' and provide an executable 'machine.x'. To run this, enter
+'./machine.x' into the terminal, and the results of the program will be outputted.
+
+- Martik Aghajanian, Cohort 8.
