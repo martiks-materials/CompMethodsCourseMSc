@@ -40,7 +40,7 @@ int main(){
 	}
 	subject_d *= 2;
 
-	// Extended precision floating points
+	// Extended precision floating points:
 	while(combo_e>unity_e){
 		subject_e *= 0.5;
 		combo_e = unity_e+subject_e;
