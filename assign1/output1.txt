@@ -1,0 +1,4 @@
+Floating Point Machine Accuracies.
+Single precision (float): 1.19209e-07
+Double precision (double): 2.22045e-16
+Extended precision (long double): 1.0842e-19
