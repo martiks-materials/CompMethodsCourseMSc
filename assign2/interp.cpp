@@ -19,78 +19,47 @@ int main(){
 	for(int i(0); i<11; i++){
 		outfile1 << xdat[i] << " " << ydat[i] << endl;
 	}
+
 	cout << "Linear Interpolation Results:" << endl;	
 	cout << "x = 0.4: y = " << linear(0.4, xdat, ydat, 11) << endl;
 	cout << "x = -0.128: y = " << linear(-0.128, xdat, ydat, 11) << endl;
 	cout << "x = -2.0: y = " << linear(-2.0, xdat, ydat, 11) << endl;
 	cout << "x = 3.2: y = " << linear(3.2, xdat, ydat, 11) << endl;
 	
-	int n = 11, start = 0, shift = 1;
-	bool natural = true;
-	double a[n], b[n], c[n], F[n], y[n];
-	double delta_1(0), delta_n(0);
-	// Cases for Boundary Conditions.
-	if(natural==true){  	
-	} else{
-		start += 1;
-		shift -= 1;
-		a[0] = 0;        
-		b[0] = (xdat[1]-xdat[0])/3;	 
-		c[0] = b[0]/2;		   
-		F[0] = (ydat[1]-ydat[0])/(xdat[1]-xdat[0])-delta_1;    
-		c[n-1] = 0;
-		b[n-1] = (xdat[n-1]-xdat[n-2])/3;
-		a[n-1] = b[n-1]/2;
-		F[n-1] = delta_n - (ydat[n-1]-ydat[n-2])/(xdat[n-1]-xdat[n-2]);
-	}
-	
-	// Cases for i = 1,2,...,n-2. 
-	for(int j(start); j<n-1; j++){
-		int i = j + shift;
-		a[j] = (xdat[i] - xdat[i-1])/6;
-		b[j] = (xdat[i+1] - xdat[i-1])/3;
-		c[j] = (xdat[i+1] - xdat[i])/6;
-		F[j] = (ydat[i+1]-ydat[i])/(xdat[i+1]-xdat[i])-(ydat[i]-ydat[i-1])/(xdat[i]-xdat[i-1]);
-	};
-	triag(a, b, c, F, y, n);
-	
-	//triag_solve(xdat, ydat, y, n, natural);
-	for(int j(0); j<n; j++){
-		cout << y[j] << ", ";
-	}
-	cout << endl << endl;
+	int n = 11;
+	double delta(0);
+	double y_nat[n], y_zfd[n];
+	triag_solve(xdat, ydat, y_nat, n, true, delta);
+	triag_solve(xdat, ydat, y_zfd, n, false, delta);
 	
 	// For natural splines
-	double y_dd[n];
-	if(natural==true){
-		y_dd[0] = 0;
-		for(int i(1); i<n-1; i++){
-			y_dd[i] = y[i-1];
-		}
-	} else {
-		for(int i(0); i<n; i++){
-			y_dd[i] = y[i];
-		}
+	double y2_nat[n] = {0};
+	for(int i(1); i<n-1; i++){
+		y2_nat[i] = y_nat[i-1];
 	}
 	double x[4] = {0.4, -0.128, -2, 3.2};
 	for(int i(0); i<4; i++){
-		cout << spline(x[i], xdat, ydat, y_dd, n) << endl; 	
+		cout << "Natural: y(x = " << x[i] << ") = " << spline(x[i], xdat, ydat, y2_nat, n) << endl; 	
+		cout << "1st Deriv. = 0: y(x = " << x[i] << ") = " << spline(x[i], xdat, ydat, y_zfd, n) << endl;
 	}
 
+
 	// Now to get data for plotting
-	int N = 500;
+	int N = 1000;
 	double dx = (xdat[n-1]-xdat[0])/N;
-	double xr[N], y_lin[N], y_cub1[N];
+	double xr[N], y_lin[N], y_cub1[N], y_cub2[N];
 	for(int i(0); i<N; i++){
 		xr[i] = xdat[0] + i*dx;
-		y_cub1[i] = spline(xr[i], xdat, ydat, y_dd, n);
+		y_cub1[i] = spline(xr[i], xdat, ydat, y2_nat, n);
+		y_cub2[i] = spline(xr[i], xdat, ydat, y_zfd, n);
 		y_lin[i] = linear(xr[i], xdat, ydat, 11);
-	}
+	}	
 
 
 	ofstream outfile2("linear.dat");
-	ofstream outfile3("cubspline.dat");
-	if((!outfile2.is_open())||(!outfile3.is_open())) {
+	ofstream outfile3("nat_spline.dat");
+	ofstream outfile4("zero_spline.dat");
+	if((!outfile2.is_open())||(!outfile3.is_open())||(!outfile4.is_open())){
 		cout << "Error opening..." << endl;
 		return 1;
 	}
@@ -98,6 +67,7 @@ int main(){
 	for(int i(0); i<N; i++){
 		outfile2 << xr[i] << "\t" << y_lin[i]  <<  endl;
 		outfile3 << xr[i] << "\t" << y_cub1[i] << endl;
+		outfile4 << xr[i] << "\t" << y_cub2[i] << endl;
 	}
 
 	return 0;

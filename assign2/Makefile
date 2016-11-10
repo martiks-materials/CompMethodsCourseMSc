@@ -3,8 +3,8 @@ CFLAGS = -c -Wall -Wextra
 LDFLAGS =
 
 EXECUTABLE = interp.x
-SOURCES = interp.cpp linear.cpp triag_own.cpp spline.cpp
-OBJECTS = interp.o linear.o triag_own.o spline.o
+SOURCES = interp.cpp linear.cpp spline.cpp triag_solve.cpp
+OBJECTS = interp.o linear.o spline.o triag_solve.o
 
 all: $(SOURCES) $(EXECUTABLE)
 
