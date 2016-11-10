@@ -1,0 +1,6 @@
+set title "Interpolation Assignment"
+set xlabel "x"
+set ylabel "y"
+set terminal pdf
+set output "graph2_1.pdf"
+plot "linear.dat" with lines, "nat_spline.dat" with lines, "zero_spline.dat" with lines
