@@ -4,4 +4,8 @@ set ylabel "y"
 set grid
 set terminal jpeg enhanced
 set output "graph2_1.jpeg"
-plot "raw.dat" with points, "linear.dat" with lines, "nat_spline.dat" with lines, "zero_spline.dat" with lines
+plot "raw.dat" with points, "linear.dat" with lines, "cubicspline.dat" with lines
+set terminal wxt persist
+plot  "raw.dat" with points, "linear.dat" with lines, "cubicspline.dat" with lines
+
+
