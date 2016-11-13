@@ -1,0 +1,17 @@
+Instructions for assign2 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+Using the Makefile provided, type 'make' into the terminal. This will compile
+the file 'interp.cpp' and provide an executable 'interp.x'. To run this, enter
+'./interp.x' into the terminal, and the results of the program will be outputted.
+
+VIEWING GRAPH:
+This will create several data files containing tabulated interpolated (x, y) points.
+To plot these in gnuplot (assuming gnuplot is installed), type 'gnuplot results.p' 
+into the terminal to display the graph for the interpolation methods.
+
+GRAPH VIEWER:
+Drag over area to zoom in, and press 'p' to return to previous zoom settings.
+
+- Martik Aghajanian, Cohort 8.
+
