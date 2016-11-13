@@ -16,6 +16,7 @@ int main(){
 			  0.527292, 0.298197, 0.105399, 3.936690e-4, 5.355348e-7};
 	int n = 11;
 	double delta_1(0), delta_n(0);
+	// The array "x" contains the x values that Q1 and Q4 require for interpolation.
 	double x[4] = {0.4, -0.128, -2, 3.2};
 	// This adds the raw data to a file to be added to a plot for comparison
 	// to the interpolated values.
@@ -51,9 +52,12 @@ int main(){
 
 
 	// For N points equally spaced between the maximum and minimum x values in the known
-	// data, both linear and cubic spline (with natural boundary conditions) interpolation
+	// data, both linear and cubic spline (natural boundary conditions) interpolation
 	// is used to compare their effectiveness at representing the function. The variable
 	// "dx" denotes the spacing between successive points in the array of x points.
+	// The data for second derivatives is already produced for both sets of boundary
+	// conditions so all that is needed is to access the arrays.
+
 	int N = 1000;
 	double dx = (xdat[n-1]-xdat[0])/N;
 	double xr[N], y_lin[N], y_cub[N];
