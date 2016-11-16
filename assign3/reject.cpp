@@ -1,11 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <ctime>
 #include "rand.h"
 #include "compare.h"
 using namespace std;
 
 int main() {
+	time_t start = clock();
         Ran myran(42);
         int lim(pow(10,5));
   	double pi = 4*atan(1.0);
@@ -24,6 +26,8 @@ int main() {
 			
      		 }
         }
+	time_t end = clock();
+	cout << "Time taken to run: " << (end-start)/(double)CLOCKS_PER_SEC << "s" <<  endl;
         ofstream outfile1("reject.dat");
         if ( !outfile1.is_open() ){
                 cout << "Error opening file." << endl;
