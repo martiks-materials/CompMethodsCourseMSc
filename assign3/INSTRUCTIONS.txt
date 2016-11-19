@@ -1,0 +1,23 @@
+Instructions for assign3 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+Using the Makefile provided, type 'make' into the terminal. This will compile
+three files 'uniform.cpp', 'transform.cpp', and 'reject.cpp', providing executables
+'uniform.x', 'transform.x', and 'reject.x'. To run this, enter
+
+'./uniform.x ; ./transform.x ; ./reject.x'
+
+into the terminal, and the results of the time measurements for transformation
+and rejection methods will be outputted. Additionally three data files will be
+produced with the random variables for each run.
+
+VIEWING GRAPH:
+To plot the raw data in gnuplot (assuming gnuplot is installed) as a histogram, type 'gnuplot histograms.p' 
+into the terminal to display the histograms for all three programs. This will also produce individual '.png'
+files displaying the histograms.
+
+GRAPH VIEWER:
+Drag over area to zoom in, and press 'p' to return to previous zoom settings.
+
+- Martik Aghajanian, Cohort 8.
+
