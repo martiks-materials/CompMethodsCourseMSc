@@ -1,3 +1,19 @@
+Computational Methods Assignment 3 Folder - Random Numbers
+
+
+Contents:
+
+rand.h        - Contains random number generator used throughout
+uniform.cpp   - File for Question 1 (uniform deviate)
+transform.cpp - File for Question 2 (transformation method)
+reject.cpp    - File for Question 3 (rejection method)
+compare.cpp   - File containing functions necessary for rejection method
+compare.h     - Header file used in the rejection method program
+Makefile      - Compiles all three main programs (for each question)
+histograms.p  - Plots in terminal and outputs .png files of histograms.
+report3.pdf   - Report describing and discussing results and justification of methods
+
+
 Instructions for assign3 folder for Computational Methods (TSM CDT):
 
 COMPILING:
