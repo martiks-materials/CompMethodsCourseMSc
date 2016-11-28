@@ -9,10 +9,13 @@
 #include "integrate.h"
 
 Integrate::Integrate(double (*func)(double x), double low, double up, double epsilon){
-	// Upon instantiation, three function evaluations are carried out to
-        // provide the estimation for two integrals "I1" and "I2" which form
+	// Upon instantiation, three evaluations of user-specified function "fnc"  are
+	// carried out to estimate the two integrals "I1" and "I2" which form
         // the first two stages in either the trapezoid or Simpson's rule.
-        // The values of "n" and "h" are updated accordingly.
+        // The values of the number of points "n" and spacing "h" are updated 
+	// accordingly. Variables "a" and "b" are the limits and "eps" is the 
+	// user-specified accuracy. Thus for this, the number of function 
+	// evaluations, "evals" is set to 3.
 	a = low;
         b = up;
         h = 0.5*(b-a);
@@ -55,7 +58,7 @@ double Integrate::trap(){
 	// Using the iterate() member function, implements the trapezoid rule,
 	// by increasing the number of points sampled in the integration until
 	// the relative change in the integral evaluation upon iteration is
-	// below the required precision.
+	// below the required precision "eps".
 	while(abs(I2-I1)>eps*abs(I1)){
 		Integrate::iterate();
 	}
