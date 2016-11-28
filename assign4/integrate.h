@@ -4,7 +4,9 @@
 // Class declaration for integration class which takes a user-specified function
 // as well as limits and a user-specified precision to which the method of 
 // integration is expected to converge. This can be used to integrate functions
-// defined on an interval, to within a specified accuracy.
+// defined on an interval,  within a specified accuracy.
+#ifndef INTEGRATE_H
+#define INTEGRATE_H
 #include <cmath>
 using namespace std;
 
@@ -47,3 +49,5 @@ public:
 	// "b" using either the trapeziod rule or Simpson's rule.
 	int get_evals() { return evals; }
 };
+
+#endif
