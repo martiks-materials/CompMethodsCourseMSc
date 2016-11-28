@@ -3,8 +3,8 @@ CFLAGS = -c -Wall -Wextra
 LDFLAGS =
 
 EXECUTABLE1 = numint.x 
-SOURCES1 = numint.cpp  
-OBJECTS1 = numint.o
+SOURCES1 = numint.cpp integrate.cpp 
+OBJECTS1 = numint.o integrate.o
 
 all: $(SOURCES1) $(EXECUTABLE1)
 

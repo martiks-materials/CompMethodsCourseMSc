@@ -1,5 +1,5 @@
 // Computational Methods Assignment 4 - Numerical Integration
-// Martik Aghajania, Cohort 8
+// Martik Aghajanian, Cohort 8
 //
 // Program which estimates the value of the error function, which
 // is the integral from 0 to argument x of the error function 
@@ -13,6 +13,8 @@ using namespace std;
 double erfi(double x) {
 	// Given double-preicision float "x", returns the value of the
 	// error function integrand (erfi), using 4*arctan(1) as pi.
+	// This simple function was not declared separately as it is not 
+	// detrimental to the readability of the programs general purpose.
         return (2/sqrt(atan(1.0)*4))*exp(-x*x);
 }
 

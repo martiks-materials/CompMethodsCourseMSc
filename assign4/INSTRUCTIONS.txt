@@ -7,7 +7,8 @@ numint.cpp    - Program calling ths necessary function and results, specifying p
 integrate.h   - Contains the class which taks the function, limits, and precision and 
 	        evaluates the associated integral using either the trapezoid rule or 
 		Simpson's rule and returns the value, and the number of function evaluations
-Makefile      - Compiles the numint.cpp program
+integrate.cpp - Contains the non-trivial class member functions for the "Integrate" class
+Makefile      - Compiles the numint.cpp and integrate.cpp programs
 report4.pdf   - Report describing and discussing results and justification of methods
 
 
@@ -15,7 +16,7 @@ Instructions for assign4 folder for Computational Methods (TSM CDT):
 
 COMPILING:
 Using the Makefile provided, type 'make' into the terminal. This will compile
-three files 'numint.cpp', providing executable 'numint.x'. To run this, enter
+two files 'numint.cpp' and 'integrate.cpp', providing executable 'numint.x'. To run this, enter
 './numint.x' into the terminal, and the results of the integrals and number of
 function evaluations will be outputted into the terminal.
 
