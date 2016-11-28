@@ -1,0 +1,23 @@
+Computational Methods Assignment 4 Folder - Numerical Integration
+
+Contents:
+
+numint.cpp    - Program calling ths necessary function and results, specifying parameters
+	        and function necessary to answer the questions in assignment 4
+integrate.h   - Contains the class which taks the function, limits, and precision and 
+	        evaluates the associated integral using either the trapezoid rule or 
+		Simpson's rule and returns the value, and the number of function evaluations
+Makefile      - Compiles the numint.cpp program
+report4.pdf   - Report describing and discussing results and justification of methods
+
+
+Instructions for assign4 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+Using the Makefile provided, type 'make' into the terminal. This will compile
+three files 'numint.cpp', providing executable 'numint.x'. To run this, enter
+'./numint.x' into the terminal, and the results of the integrals and number of
+function evaluations will be outputted into the terminal.
+
+- Martik Aghajanian, Cohort 8.
+
