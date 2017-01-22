@@ -4,8 +4,8 @@ LDFLAGS =
 
 EXECUTABLE1 = intmain.x
 EXECUTABLE2 = erfmain.x 
-SOURCES1 = intmain.cpp  specifics.cpp 
-SOURCES2 = erfmain.cpp
+SOURCES1 = intmain.cpp rk4.cpp specifics.cpp 
+SOURCES2 = erfmain.cpp rk4.cpp
 OBJECTS1 = $(SOURCES1:.cpp=.o) 
 OBJECTS2 = $(SOURCES2:.cpp=.o)
 

@@ -1,9 +1,16 @@
-// Computational Methods - Assignment 5
-// This contains the class definition and the member function prototypes
-// for the Rungekutta45 class which carries out generally coupled ODE solving,
-// used in the assignment.
+// Computational Methods Assignment 5 - ODE Integration
+// Martik Aghajanian Cohort 8
+//
+// Class declaration for Runge-Kutta '45' class which takes a user-specified function
+// as well as initial values for the independent and dependent variables. This class
+// can be used to iterate the adaptive step size method in order to obtain a 5th order
+// accurate result from a 4th order method.  
+
 #pragma once
 using namespace std;
+
+// Several valarrays, vectors and functions are initialised in this class so it is 
+// sensible to define some typedefs 
 
 typedef vector<double> vecdoub;
 typedef valarray<double> valdoub;
@@ -17,8 +24,10 @@ class Rungekutta4{
 // dependent variables at each step.
 private:
 	// The variable 'y' is the updatable current value of the solution vector
-	// at each time step, and the function 'fnc' is that which provides the
-	// ODE problem (d(y)/dx = fnc). Also a desired tolerance 'eps' is used
+	// at each time step and the function 'fnc' is that which provides the
+	// ODE problem (d(y)/dx = fnc). To reduce the number of function evaluations
+	// in the step-doubling procedure, 'k_val' is an updatable value of the 
+	// function at the current step. Also a desired tolerance 'eps' is used
 	// for selecting the desired relative accuracy of the solution at each
 	// step of the dependent variable. This class is also supplied a 'limit'
 	// which prevents the independent variable from exceeding a particular
@@ -31,7 +40,7 @@ private:
 public:	
 	// For N coupled ODE's, 'yn' is the vector of vectors, for which each
 	// nested vector stores the evolution of one of the dependent variables
-	// in the initial vector for all steps. The evolution of the independent
+	// in the initial vector, for all steps. The evolution of the independent
 	// variable (x) is stored in 'xlist'.
 
 	vector< vector<double> > yn;
@@ -39,95 +48,21 @@ public:
 
 	// The current value of the independent variable is 'x_now', whilst the 
 	// current step size is 'h'. To aid the adapive step size calculation,
-	// a safety factor 'S' can be used. The integers 'counter' and 'N' 
-	// represent the number of steps taken and number of dependent variables
-	// in the solution vector respectively.
+	// a 'safety' factor can be used. The integer 'N' is the number of dependent
+	// variables in the vector. Respectively, the 'evals', 'numvals' and 'repeats' 
+	// variables count the number of function evaluations, number of values in the 
+	// 'xlist', and number of steps which had to be repeated. Finally, the bool
+	// 'collapse' is used if the function does not depende on any of the dependent
+	// variables and as a result the method collapsed to a 3-point Simpson's rule.
+
 	double x_now, h, safety;
 	int  evals, numvals, repeats, N;
 	bool collapse;
-	Rungekutta4(valdoub yin, function func, double dx, double epsilon, double xmax, double xmin=0, int ns=2, bool col=false, double safe=1.){
-		y = yin;
-		N = ns;
-		fnc = func;
-		h = dx;
-		for(int i(0); i<N ; i++){
-			vecdoub temp = {yin[i]};
-			yn.push_back(temp);
-		}
-		limit = xmax;
-		eps = epsilon;
-		x_now = xmin;
-		safety = safe;
-		collapse = col;
-		evals = 0;
-		numvals = 1;
-		repeats = 0;
-		xlist.push_back(x_now);
-	}
 
-	void step(valarray<double> &ys , double xs, double d, bool reuse){
-		// Implements the 4th order Runge-Kutta Method for a vector function
-		// of both independent variable 'x' and vector of dependent variables
-		// 'y', over a step size of 'd'. Updates the current member variable
-		// in the 'y' vector, opposed to returning a result. Since the full
-		// is always carried out first in this class, then the bool 'half' 
-		// allows for one less function evaluation. If 'half' is false then
-		// class member variable 'k1' is updated, whilst 'half' being true
-		// means the current 'k1' is used.
+	Rungekutta4(valdoub yin, function func, double dx, double epsilon, double xmax, 
+				double xmin=0, int ns=2, bool col=false, double safe=1.);
 
-		valdoub k1 = ((reuse)?k_val:(*fnc)(ys,xs))*d;
-                valdoub k2 = (*fnc)(ys+0.5*k1, xs+0.5*d)*d;
-                valdoub k3 = (collapse)? k2 : ((*fnc)(ys+0.5*k2, xs+0.5*d)*d);
-		valdoub k4 = (*fnc)(ys+k3, xs+d)*d;
-		evals += ((collapse)? 3 : 4) - ((reuse)? 1 : 0);
-		for(int i(0); i<N ; i++){
-                        ys[i] += (k1[i]+2*k2[i]+2*k3[i]+k4[i])/6;
-                }
-	}
-	
-	void iterate(){
-		// Performs an iteration of the Runge-Kutta45 method, in which step
-		// doubling is used.
-		h = (x_now+h>limit)? limit-x_now: h;
-		valdoub y_c = y, y_half = y;
-		k_val = (*fnc)(y, x_now);
-		step(y_c, x_now, h, true);
-		step(y_half, x_now, 0.5*h, true);
-		step(y_half, x_now+0.5*h, 0.5*h, false);
-		valdoub delta1 = y_half-y_c;
-		// The current step size is then altered to that which gives the desired
-		// accuracy, additionally using a'safety factor' S.
-		double h_new = h*safety*pow(abs(eps*y_c.max()/delta1.max()), 0.2);
-		if(h>h_new){
-			// If the calculated optimal step size is less than the step size
-			// then the step must be redone with the step-doubling to make the
-			// calculation 5th order accurate.
-			h = h_new;
-			valdoub y_new = y,
-	                y_half = y;
-	                step(y_new, x_now, h, true);
-			step(y_half, x_now, 0.5*h, true);
-	                step(y_half, x_now+0.5*h, 0.5*h, false);
-	            	delta1 = y_half-y_new;
-			y = y_half + (1./15)*delta1;
-			x_now += h;
-			repeats++;
-		}
-		else {
-			// If the step taken originally was smaller than the step size needed,
-			// then the step is not re-done, but the optimal step size is used as
-			// the initial step size used for the next step.
-			x_now += h;
-			y = y_half + (1./15)*delta1;
-			h = h_new;
-
-		}
-	
-		xlist.push_back(x_now);
-		for(int i(0); i<N ; i++){
-                        yn[i].push_back(y[i]);
-		}
-		numvals++;
-	}
+	void step(valarray<double> &ys , double xs, double d, bool reuse);
+		
+	void iterate();
 };
-
