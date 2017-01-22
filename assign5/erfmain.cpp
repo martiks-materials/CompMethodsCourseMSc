@@ -14,13 +14,28 @@ valarray<double> erfint(valarray<double> y, double x){
 
 int main(){
 	valarray<double> y = {0};
-	double xrange(2.0), dx(1E-2), eps(1E-6);
-	Rungekutta4 Rk4 = {y, &erfint, dx, eps, xrange, 1};
-	while(Rk4.x_now<xrange){
-		Rk4.iterate();
+	double xrange(2.0), xmin(0.0), dx(1E-2), eps(1E-6);
+	Rungekutta4 rk_simps = {y, &erfint, dx, eps, xrange, xmin, 1, true, 0.98};
+	Rungekutta4 rk_full = {y, &erfint, dx, eps, xrange, xmin, 1, false, 0.98};
+	while(rk_simps.x_now<xrange){
+		rk_simps.iterate();
 	}
-	cout << "x = " << Rk4.xlist.back() << endl;
-	cout << "y = " << Rk4.yn[0].back() << endl;
+	while(rk_full.x_now<xrange){
+		rk_full.iterate();
+	}
+	cout.precision(11);
+
+	cout << "Original (not collapsed) RK45 Method:" << endl;
+	cout << "erf(x=" << rk_simps.xlist.back() << ") = " <<  rk_simps.yn[0].back() << endl;
+	cout << "No. Steps = " << rk_simps.numvals-1 << endl;
+	cout << "Fnc. Evaluations = " << rk_simps.evals << endl;
+	cout << "Repeated steps = " << rk_simps.repeats << endl << endl;
+
+	cout << "Collapsed RK45 Method:" << endl;
+        cout << "erf(x=" << rk_full.xlist.back() << ") = " <<  rk_full.yn[0].back() << endl;
+        cout << "No. Steps = " << rk_full.numvals-1 << endl;
+	cout << "Fnc. Evaluations = " << rk_full.evals << endl;
+	cout << "Repeated steps = " << rk_full.repeats << endl;
 	return 0;
 }
 		

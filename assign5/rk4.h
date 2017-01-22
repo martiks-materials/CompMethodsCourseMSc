@@ -5,15 +5,16 @@
 #pragma once
 using namespace std;
 
-//typedef valarray<double> vec;
-//typedef valarray<double> (*mypointertype) (valarray<double>, double); 
+typedef vector<double> vecdoub;
+typedef valarray<double> valdoub;
+typedef valarray<double> (*function) (valarray<double>, double); 
 
 class Rungekutta4{
 // This class takes an initial N element solution vector, and a vector function
 // that defines the ODE problem, and iterates in dependent variable steps to a 
 // solution. This was used to gradually update the solution and provide simplicity 
 // when attemping to store and obtain the independent variable and vector of 
-//dependent variables at each step.
+// dependent variables at each step.
 private:
 	// The variable 'y' is the updatable current value of the solution vector
 	// at each time step, and the function 'fnc' is that which provides the
@@ -23,9 +24,8 @@ private:
 	// which prevents the independent variable from exceeding a particular
 	// value when implementing an adaptive step size.
 
-	valarray<double> y;
-        // mypointertype fnc;
-	valarray<double> (*fnc)(valarray<double>, double );
+	valdoub y, k_val;
+        function fnc;
 	double eps;
 	double limit;
 public:	
@@ -35,46 +35,51 @@ public:
 	// variable (x) is stored in 'xlist'.
 
 	vector< vector<double> > yn;
-	vector<double> xlist;
+	vecdoub xlist;
 
 	// The current value of the independent variable is 'x_now', whilst the 
 	// current step size is 'h'. To aid the adapive step size calculation,
 	// a safety factor 'S' can be used. The integers 'counter' and 'N' 
 	// represent the number of steps taken and number of dependent variables
 	// in the solution vector respectively.
-	double x_now, h, S;
-	int counter, N;
-	Rungekutta4(valarray<double> yin, valarray<double> (*func)(valarray<double>, double), double dx, double epsilon, double xmax, int Np=2){
+	double x_now, h, safety;
+	int  evals, numvals, repeats, N;
+	bool collapse;
+	Rungekutta4(valdoub yin, function func, double dx, double epsilon, double xmax, double xmin=0, int ns=2, bool col=false, double safe=1.){
 		y = yin;
-		N = Np;
+		N = ns;
 		fnc = func;
 		h = dx;
 		for(int i(0); i<N ; i++){
-			vector<double> temp = {yin[i]};
+			vecdoub temp = {yin[i]};
 			yn.push_back(temp);
 		}
-		/*
-		for(int j(0); j<N; j++){	
-			yn[j].push_back(yin[j]);
-		} 
-		*/
 		limit = xmax;
 		eps = epsilon;
-		x_now = 0;
-		counter = 1;
-		S = 0.95; 
+		x_now = xmin;
+		safety = safe;
+		collapse = col;
+		evals = 0;
+		numvals = 1;
+		repeats = 0;
 		xlist.push_back(x_now);
 	}
 
-	void step(valarray<double> &ys , double xs, double d){
+	void step(valarray<double> &ys , double xs, double d, bool reuse){
 		// Implements the 4th order Runge-Kutta Method for a vector function
 		// of both independent variable 'x' and vector of dependent variables
 		// 'y', over a step size of 'd'. Updates the current member variable
-		// in the 'y' vector, opposed to returning a result.
-		valarray<double> k1 = (*fnc)(ys,xs)*d;
-                valarray<double> k2 = (*fnc)(ys+0.5*k1, xs+0.5*d)*d;
-                valarray<double> k3 = (*fnc)(ys+0.5*k2, xs+0.5*d)*d;
-		valarray<double> k4 = (*fnc)(ys+k3, xs+d)*d;
+		// in the 'y' vector, opposed to returning a result. Since the full
+		// is always carried out first in this class, then the bool 'half' 
+		// allows for one less function evaluation. If 'half' is false then
+		// class member variable 'k1' is updated, whilst 'half' being true
+		// means the current 'k1' is used.
+
+		valdoub k1 = ((reuse)?k_val:(*fnc)(ys,xs))*d;
+                valdoub k2 = (*fnc)(ys+0.5*k1, xs+0.5*d)*d;
+                valdoub k3 = (collapse)? k2 : ((*fnc)(ys+0.5*k2, xs+0.5*d)*d);
+		valdoub k4 = (*fnc)(ys+k3, xs+d)*d;
+		evals += ((collapse)? 3 : 4) - ((reuse)? 1 : 0);
 		for(int i(0); i<N ; i++){
                         ys[i] += (k1[i]+2*k2[i]+2*k3[i]+k4[i])/6;
                 }
@@ -83,22 +88,46 @@ public:
 	void iterate(){
 		// Performs an iteration of the Runge-Kutta45 method, in which step
 		// doubling is used.
-		valarray<double> y_half = y;
-		if(x_now+h>limit){
-			h = limit-x_now;
+		h = (x_now+h>limit)? limit-x_now: h;
+		valdoub y_c = y, y_half = y;
+		k_val = (*fnc)(y, x_now);
+		step(y_c, x_now, h, true);
+		step(y_half, x_now, 0.5*h, true);
+		step(y_half, x_now+0.5*h, 0.5*h, false);
+		valdoub delta1 = y_half-y_c;
+		// The current step size is then altered to that which gives the desired
+		// accuracy, additionally using a'safety factor' S.
+		double h_new = h*safety*pow(abs(eps*y_c.max()/delta1.max()), 0.2);
+		if(h>h_new){
+			// If the calculated optimal step size is less than the step size
+			// then the step must be redone with the step-doubling to make the
+			// calculation 5th order accurate.
+			h = h_new;
+			valdoub y_new = y,
+	                y_half = y;
+	                step(y_new, x_now, h, true);
+			step(y_half, x_now, 0.5*h, true);
+	                step(y_half, x_now+0.5*h, 0.5*h, false);
+	            	delta1 = y_half-y_new;
+			y = y_half + (1./15)*delta1;
+			x_now += h;
+			repeats++;
 		}
-		step(y, x_now, h);
-		step(y_half, x_now, 0.5*h);
-		step(y_half, x_now+0.5*h, 0.5*h);
-		valarray<double> delta1 = y_half-y;
-		x_now += h;
+		else {
+			// If the step taken originally was smaller than the step size needed,
+			// then the step is not re-done, but the optimal step size is used as
+			// the initial step size used for the next step.
+			x_now += h;
+			y = y_half + (1./15)*delta1;
+			h = h_new;
+
+		}
+	
 		xlist.push_back(x_now);
-		h *= S*pow(abs(eps*y.max())/abs(delta1.max()), 0.2);
-		y = y_half + (1./15)*delta1;
 		for(int i(0); i<N ; i++){
                         yn[i].push_back(y[i]);
 		}
-		counter++;
+		numvals++;
 	}
 };
 
