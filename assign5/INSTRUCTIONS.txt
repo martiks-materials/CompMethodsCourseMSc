@@ -1,0 +1,39 @@
+Computational Methods Assignment 5 Folder - ODE Integration
+
+Contents:
+
+intmain.cpp    - Program which answers question 1 by solving the given coupled
+	      	 ODE's using the Runge-Kutta '45' class.
+erfmain.cpp    - Program corresponding to question 2 which compares the number of
+		 function evaluations of both the RK45 method and the collapsed 
+		 adaptive Simpson's rule to evaluated the error function (which
+		 is included in this file) at x = 2.
+specifics.cpp  - Contains the multivariate vector function which represents the
+	         set of coupled ODE's specified in question 1.
+specifics.h    - Header for the mulitvariate vector function in question 1.
+rk4.h          - Header file containing the declaration of the Rungekutta4 class
+		 and associated member functions used for all calculations
+	       - Contains the non-trivial class member functions for the 
+		 "Rungekutta4" class
+Makefile       - Compiles the intmain.cpp and erfmain.cpp programs
+report5.pdf    - Report describing methods and discussing displayed results
+intgraph.p     - Contains instructions for gnuplot to view the raw data
+
+
+Instructions for assign5 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+Using the Makefile provided, type 'make' into the terminal. This will compile
+two files 'intmain.cpp' and 'erfmain.cpp', providing executables 'intmain.x' and
+'erfmain.x'. To run these, enter './intmain.x' into the terminal, followed by 
+'./erfmain.x' and the results used in this assignment's report will be outputted.
+Additionally, '.dat' files will be produced containing the data of question 1.
+
+VIEWING GRAPH:
+To plot the raw data in gnuplot (assuming gnuplot is installed), type 'gnuplot intgraph.p'
+into the terminal to display both graphs in this assignmet. This will also produce individual '.png'
+files for each.
+
+
+- Martik Aghajanian, Cohort 8.
+

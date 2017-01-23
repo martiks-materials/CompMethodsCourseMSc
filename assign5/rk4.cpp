@@ -2,7 +2,7 @@
 // Martik Aghajanian, Cohort 8
 //
 // This file contains the class member functions of the "RungeKutta4"
-// class used for assignment 5."
+// class used for assignment 5.
 #include <vector>
 #include <valarray>
 #include <cmath>

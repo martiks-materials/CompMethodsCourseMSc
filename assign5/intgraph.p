@@ -9,8 +9,7 @@ plot 'runge1.dat' with linespoints title "y1(x)", 'runge2.dat' with linespoints 
 set grid
 set xlabel "y1"
 set ylabel "y2"
-plot 'runge3.dat' with linespoints
-
+plot 'runge3.dat' with linespoints notitle
 
 unset multiplot
 
@@ -26,6 +25,6 @@ set output "runge3.png"
 set grid
 set xlabel "y1"
 set ylabel "y2"
-plot 'runge3.dat' with linespoints
+plot 'runge3.dat' with linespoints notitle
 
 

@@ -1,3 +1,4 @@
+// Header for the specific vector function used in Q1.
 #pragma once
 using namespace std;
 
