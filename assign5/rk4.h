@@ -27,16 +27,20 @@ private:
 	// at each time step and the function 'fnc' is that which provides the
 	// ODE problem (d(y)/dx = fnc). To reduce the number of function evaluations
 	// in the step-doubling procedure, 'k_val' is an updatable value of the 
-	// function at the current step. Also a desired tolerance 'eps' is used
+	// function at the current step. In the case of the function not depending on
+	// the vector of dependent variables, the updatable valarray 'k_rep' is used to 
+	// further reduce the function evaluation count by reusing values from a previous 
+	// step for a 3-point Simpson's rule. Also a desired tolerance 'eps' is used
 	// for selecting the desired relative accuracy of the solution at each
 	// step of the dependent variable. This class is also supplied a 'limit'
 	// which prevents the independent variable from exceeding a particular
 	// value when implementing an adaptive step size.
 
-	valdoub y, k_val;
+	valdoub y, k_val, k_rep;
         function fnc;
 	double eps;
 	double limit;
+
 public:	
 	// For N coupled ODE's, 'yn' is the vector of vectors, for which each
 	// nested vector stores the evolution of one of the dependent variables
@@ -58,11 +62,13 @@ public:
 	double x_now, h, safety;
 	int  evals, numvals, repeats, N;
 	bool collapse;
+	
+	// See rk4.cpp for descriptions of the member functions below.
 
 	Rungekutta4(valdoub yin, function func, double dx, double epsilon, double xmax, 
 				double xmin=0, int ns=2, bool col=false, double safe=1.);
 
-	void step(valarray<double> &ys , double xs, double d, bool reuse);
+	void step(valarray<double> &ys , double xs, double d, bool reuse, bool single, bool endhald);
 		
 	void iterate();
 };

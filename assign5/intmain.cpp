@@ -24,6 +24,11 @@ int main(){
 		return 1;
 	}
 	
+
+	cout << "No. Steps = " << Rk4.numvals-1 << endl;
+        cout << "Fnc. Evaluations = " << Rk4.evals << endl;
+        cout << "Repeated steps = " << Rk4.repeats << endl;
+
 	for(int i(0); i<Rk4.numvals ; i++){
 		outfile1 << Rk4.xlist.at(i) << " " << Rk4.yn[0].at(i) << endl;
 		outfile2 << Rk4.xlist.at(i) << " " << Rk4.yn[1].at(i) << endl;
