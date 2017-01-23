@@ -17,11 +17,11 @@ using namespace std;
 int main(){
 	// Initiate a valarray (vector with element wise addition and scalar
         // multiplication) 'y', number of elements/dimensions 'n_d' set to 2.
-	//  The double precision values
-        // 'xmax' and 'xmin' give the limits of integration whilst 'dx' is
-        // the inital step size and 'eps' is the desired tolerance used in
-        // the adaptive step size. To attain a step size that is slightly
-        // more likely to be more optimal, a 'safety' factor is added too. 
+	// The double precision values 'xmax' and 'xmin' give the limits of
+	// integration whilst 'dx' is the inital step size and 'eps' is the 
+	// desired tolerance used in the adaptive step size method. To attain 
+	// a step size that is more likely to be more optimal, a 'safety' 
+	// factor is included in the calculations.. 
 	
 	valarray<double> y = {1.5, 1.5};
 	int n_d(2);

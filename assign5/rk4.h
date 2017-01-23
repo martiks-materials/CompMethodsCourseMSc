@@ -18,7 +18,7 @@ typedef valarray<double> (*function) (valarray<double>, double);
 
 class Rungekutta4{
 // This class takes an initial N element solution vector, and a vector function
-// that defines the ODE problem, and iterates in dependent variable steps to a 
+// that defines the ODE problem, and iterates the dependent variable in steps to a 
 // solution. This was used to gradually update the solution and provide simplicity 
 // when attemping to store and obtain the independent variable and vector of 
 // dependent variables at each step.
@@ -56,7 +56,7 @@ public:
 	// variables in the vector. Respectively, the 'evals', 'numvals' and 'repeats' 
 	// variables count the number of function evaluations, number of values in the 
 	// 'xlist', and number of steps which had to be repeated. Finally, the bool
-	// 'collapse' is used if the function does not depende on any of the dependent
+	// 'collapse' is used if the function does not depend on any of the dependent
 	// variables and as a result the method collapsed to a 3-point Simpson's rule.
 
 	double x_now, h, safety;

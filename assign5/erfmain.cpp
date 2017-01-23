@@ -32,7 +32,7 @@ int main(){
 	// 'xmax' and 'xmin' give the limits of integration whilst 'dx' is
 	// the inital step size and 'eps' is the desired tolerance used in
 	// the adaptive step size. To attain a step size that is slightly
-	// more likely to be more optimal, a 'safety' factor is added too. 
+	// more likely to be more optimal, a 'safety' factor is included. 
 
 	valarray<double> y = {0};
 	int n_d(1);
@@ -56,7 +56,7 @@ int main(){
 	while(rk_full.x_now<xmax){
 		rk_full.iterate();
 	}
-	cout.precision(11);
+	cout.precision(10);
 
 	cout << "RK45 Method Collapsed to 3-point Simpson's Rule:" << endl;
 	cout << "erf(x=" << rk_simps.xlist.back() << ") = " <<  rk_simps.yn[0].back() << endl;

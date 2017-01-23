@@ -13,7 +13,7 @@ specifics.cpp  - Contains the multivariate vector function which represents the
 specifics.h    - Header for the mulitvariate vector function in question 1.
 rk4.h          - Header file containing the declaration of the Rungekutta4 class
 		 and associated member functions used for all calculations
-	       - Contains the non-trivial class member functions for the 
+rk4.cpp	       - Contains the non-trivial class member functions for the 
 		 "Rungekutta4" class
 Makefile       - Compiles the intmain.cpp and erfmain.cpp programs
 report5.pdf    - Report describing methods and discussing displayed results
@@ -31,7 +31,7 @@ Additionally, '.dat' files will be produced containing the data of question 1.
 
 VIEWING GRAPH:
 To plot the raw data in gnuplot (assuming gnuplot is installed), type 'gnuplot intgraph.p'
-into the terminal to display both graphs in this assignmet. This will also produce individual '.png'
+into the terminal to display both graphs in this assignment. This will also produce individual '.png'
 files for each.
 
 
