@@ -44,12 +44,12 @@ int main() {
 	ofstream outfile2b("numtrack2.dat");
 	ofstream outfile3a("ertrack3.dat");
 	ofstream outfile3b("numtrack3.dat");
-	for(int i(0); i <= maxsteps; i++){
-		outfile1a << log2(Monte1.steps[i]/mstart) << "   " << Monte1.errors[i] << endl;
+	for(int i(1); i <= maxsteps; i++){
+		outfile1a << log2(Monte1.steps[i]/mstart) << "   " << log(Monte1.errors[i]) << endl;
 		outfile1b << log2(Monte1.steps[i]/mstart) << "   " << Monte1.vals[i] << endl;
-		outfile2a << log2(Monte2.steps[i]/mstart) << "   " << Monte2.errors[i] << endl;
+		outfile2a << log2(Monte2.steps[i]/mstart) << "   " << log(Monte2.errors[i]) << endl;
 		outfile2b << log2(Monte2.steps[i]/mstart) << "   " << Monte2.vals[i] << endl;
-		outfile3a << log2(Monte3.steps[i]/mstart) << "   " << Monte3.errors[i] << endl;
+		outfile3a << log2(Monte3.steps[i]/mstart) << "   " << log(Monte3.errors[i]) << endl;
 		outfile3b << log2(Monte3.steps[i]/mstart) << "   " << Monte3.vals[i] << endl;
 	}
 	outfile1a.close();
