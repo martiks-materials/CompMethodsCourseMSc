@@ -32,7 +32,7 @@ public:
 	// To avoid overflow, the number of steps M must be a long unsigned integer
 	// and the initial number of steps M_init must also be since the variables 
 	// are compared.
-	vec steps, errors, X;
+	vec steps, errors, vals, X;
 	unsigned long int M, M_init, M_max;
 	double R, V, fsum_old, fsum_new, fsq_old, fsq_new; 	
 	bool importance, reject;
@@ -71,7 +71,8 @@ public:
 		fsum_old /= M;
 		fsq_old /= M;
 		steps.push_back(M);
-		errors.push_back(R); 
+		errors.push_back(R);
+		vals.push_back(fsum_old); 
 	}
 
 	void sample(){
@@ -109,6 +110,7 @@ public:
 			cout << doublings << " steps: " << fsum_new << endl;
 			errors.push_back(R);
 			steps.push_back(M);
+			vals.push_back(fsum_new);
 			if(M>=M_max){
 				cout << "Threshold of steps reached. Integration terminated." << endl;
 				break;

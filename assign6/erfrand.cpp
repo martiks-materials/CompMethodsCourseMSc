@@ -39,19 +39,25 @@ int main() {
         Mcint Monte = {erfi, a, b, Ndim, see, eps, mstart, importan, pdf, invcdf, mmax};
         Monte.integrate();
 	if(importan){
-		ofstream outfile("ertrack2.dat");
+		ofstream outfile1("ertrack2.dat");
+		ofstream outfile2("numtrack2.dat");
 		for(int i(0); i <= maxsteps; i++){
-			outfile << log2(Monte.steps[i]/mstart) << "   " << Monte.errors[i] << endl;
+			outfile1 << log2(Monte.steps[i]/mstart) << "   " << Monte.errors[i] << endl;
+			outfile2 << log2(Monte.steps[i]/mstart) << "   " << Monte.vals[i] << endl;
 		}
-		outfile.close();
+		outfile1.close();
+		outfile2.close();
         	cout << "Importance Sampling: " << Monte.fsum_new << " +/- " << Monte.error2() <<  endl;
 	}
 	else {
-		ofstream outfile("ertrack1.dat");
+		ofstream outfile1("ertrack1.dat");
+		ofstream outfile2("numtrack1.dat");
 		for(int i(0); i <= maxsteps; i++){
-			outfile << log2(Monte.steps[i]/mstart) << "   " << Monte.errors[i] << endl;
+			outfile1 << log2(Monte.steps[i]/mstart) << "   " << Monte.errors[i] << endl;
+			outfile2 << log2(Monte.steps[i]/mstart) << "   " << Monte.vals[i] << endl;
 		}	
-		outfile.close();
+		outfile1.close();
+		outfile2.close();
         	cout << "Uniform Sampling: " << Monte.fsum_new << " +/- " << Monte.error2() <<  endl;
 	}
         return 0;
