@@ -20,11 +20,11 @@ double invcdf(double x){
 }
 
 double pdf2(vector<double> y){
-	return 0.5*exp(-0.5*y[0])/(1-pow(M_E, -1));
+	return 1.5*exp(-1.5*y[0])/(1-pow(M_E, -3));
 }
 
 double invcdf2(double x){
-	return -2*log(1-((1-pow(M_E,-1))*x));
+	return -(2./3)*log(1-((1-pow(M_E,-3))*x));
 }
 
 int main() {
