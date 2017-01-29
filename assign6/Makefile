@@ -3,7 +3,7 @@ CFLAGS = -c -Wall -Wextra
 LDFLAGS =
 
 EXECUTABLE1 = erfrand.x 
-SOURCES1 = erfrand.cpp
+SOURCES1 = erfrand.cpp multifunc.cpp
 OBJECTS1 = $(SOURCES1:.cpp=.o)
 
 all: $(SOURCES1) $(EXECUTABLE1)

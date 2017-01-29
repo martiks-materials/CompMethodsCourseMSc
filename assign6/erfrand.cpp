@@ -1,41 +1,46 @@
+// Computational Methods Assignment 6 - Monte Carlo Integration
+// Martik Aghajanian, Cohort 8
+//
+// Program to integrate the error function evaluated at 2 using Monte Carlo
+// integration, using both a uniform sampling and importance sampling for
+// two separate probability distribution functions. Outputs the data for each 
+// case into respective data sets. 
 #include <fstream>
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include "mcint.h"
+#include "multifunc.h"
 using namespace std;
 
 
-double erfi(vector<double> x){
-	return (2./sqrt(M_PI))*exp(-x[0]*x[0]);
-}
-
-double pdf(vector<double> y){
-        return 0.98-(0.48*y[0]);
-}
-
-double invcdf(double x){
-	double X = (0.98-sqrt((0.98*0.98)-(0.96*x)))/0.48;
-	return X;
-}
-
-double pdf2(vector<double> y){
-	return 1.5*exp(-1.5*y[0])/(1-pow(M_E, -3));
-}
-
-double invcdf2(double x){
-	return -(2./3)*log(1-((1-pow(M_E,-3))*x));
-}
-
 int main() {
+	// 'Ndim' gives the number of dimensions of the problem, i.e. the number of independent
+	// variables the integrand depends on. The first iterations to estimate the first guess
+	// of the integration is done using 'mstart' samples. This is done with some random
+	// for which 'see' gives the seed. The integration will stop once a maximum of 'maxsteps' 
+	// iterations (each step doubles the number of samples in the integration). The variables 
+	// 'mstart' and 'maxsteps' can be combined to produce the variables 'mmax' which represents
+	// how many samples this requires to integrate the function. The desired tolerance
+	// that the integration aspires to achieve, and for which the integration will cease if the 
+	// maximum steps is not reached, is 'eps'. 
 	int Ndim(1), mstart(500), see(142), maxsteps(22);
 	unsigned long int mmax = int(mstart*pow(2, maxsteps));
 	double eps(1E-6);
+
+	// Three separate intgration objects are instantiated between the same vector of lower and 
+	// upper limits, represented by 'a' and 'b' respectively. The first has the boolean variable
+	// 'importance' set to false whilst the other two have it set to true, so importance sampling
+	// can be implemented.
         vec a = {0}, b = {2};
         Mcint Monte1 = {erfi, a, b, Ndim, see, eps, mstart, false, pdf, invcdf, mmax};
         Mcint Monte2 = {erfi, a, b, Ndim, see, eps, mstart, true, pdf, invcdf, mmax};
         Mcint Monte3 = {erfi, a, b, Ndim, see, eps, mstart, true, pdf2, invcdf2, mmax};
-        Monte1.integrate();
+        
+	// All three are integrated until either the maximum number of sample doublings has been 
+	// reached or that the tolerance has been achieved. The data of convergence of both value
+	// and error (to 0) is recorded into .dat files to be plotted.
+	Monte1.integrate();
 	Monte2.integrate();
 	Monte3.integrate();
 	ofstream outfile1a("ertrack1.dat");
