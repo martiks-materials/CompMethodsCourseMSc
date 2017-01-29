@@ -24,6 +24,7 @@ int main() {
 	// how many samples this requires to integrate the function. The desired tolerance
 	// that the integration aspires to achieve, and for which the integration will cease if the 
 	// maximum steps is not reached, is 'eps'. 
+
 	int Ndim(1), mstart(500), see(142), maxsteps(22);
 	unsigned long int mmax = int(mstart*pow(2, maxsteps));
 	double eps(1E-6);
