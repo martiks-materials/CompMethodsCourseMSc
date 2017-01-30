@@ -25,7 +25,7 @@ int main() {
 	// that the integration aspires to achieve, and for which the integration will cease if the 
 	// maximum steps is not reached, is 'eps'. 
 
-	int Ndim(1), mstart(500), see(42), maxsteps(22);
+	int Ndim(1), mstart(500), see(42), maxsteps(13);
 	unsigned long int mmax = int(mstart*pow(2, maxsteps));
 	double eps(1E-6);
 

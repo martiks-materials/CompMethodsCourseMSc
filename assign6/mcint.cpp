@@ -9,16 +9,17 @@ using namespace std;
 typedef vector<double> vec;
 typedef double (*func)(vector<double>);
 typedef double (*unifun)(double);
-
+typedef vector< vector<double> > vecvec;
 
 Mcint::Mcint(func fnc, vec a, vec b, int N, int seed, double tol, int Mstart, 
-      bool imp, func pdf, unifun cdf, unsigned long int stepmax){
+      bool imp, func pdf, unifun cdf, unsigned long int stepmax, bool tran, vecvec distri){
 	f = fnc;
 	p = pdf;
 	cy = cdf;
 	x_low = a;
 	x_up = b;
 	Nd = N;
+	disvec = distri;
 	// For uniform sampling, the volume is needed, so is constructed using
 	// the bounds of the 'x_low' and 'x_up' for each dimension.
 	V=1;
@@ -33,6 +34,7 @@ Mcint::Mcint(func fnc, vec a, vec b, int N, int seed, double tol, int Mstart,
 	M_init = Mstart;
 	M_max = stepmax;
 	importance = imp;
+	transform = tran;
 	fsum = 0;
 	fsq = 0;
 	R = 1;
@@ -116,9 +118,12 @@ void Mcint::generator(){
 	for(int i(0); i<Nd; i++){
 		// For each variable, calculates the random deviate (uniform) and then
 		// applies the transformation method if cummulative distribution function
-		// is supplied.
-		double rx = myran.doub();
-		X[i] = x_low[i] + (importance)?((*cy)(rx)):((x_up[i]-x_low[i])*rx);	
+		// is supplied. If the transformation method is not being used, then the
+		// vector of vectors supplied by the user allocates the arbitrarily 
+		// distributed random numbers to the Nd-component vector 'X'
+		double rang = x_up[i]-x_low[i];
+		double rx = (transform)?(myran.doub()):0;
+		X[i] = x_low[i] + (transform)?((importance)?((*cy)(rx)):(rang*rx)):(rang*disvec[M][i]);	
 	}
 }
 	

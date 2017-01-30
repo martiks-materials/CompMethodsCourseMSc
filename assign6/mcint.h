@@ -14,6 +14,7 @@ using namespace std;
 typedef vector<double> vec;
 typedef double (*func)(vector<double>);
 typedef double (*unifun)(double);
+typedef vector< vector<double> > vecvec;
 
 class Mcint {
 // This class takes in an arbitraty N-variable function and a vector of limits
@@ -30,16 +31,21 @@ private:
 	// number of independent variables in the function is gives the dimension of the
 	// integration 'Nd'. The user must also specify bounds in the form of vectors
 	// 'x_up' and 'x_low' which give upper and lower bounds respectively. The tolerance
-	// or accuracy desired by the user is 'eps'. The random numbers which are either 
-	// used directly or passed through the transformation method come from the a random
-	// generator 'myran'.
+	// or accuracy desired by the user is 'eps'. The random numbers for this can be used
+	// from the uniform random generator 'myran' and transformed using 'cy', or can be 
+	// supplied by the user using a vector of vectors 'disvec' which will contain a number
+	// of Nd-component vectors equal to the maximum number of samples in this integration.
+	// This means for Gaussian distributions and non-invertible many dimension integrals, 
+	// supplying the random numbers will be the users task, though the corresponding 
+	// probability distribution must also be supplied.
 
 	func f, p; 
 	unifun cy;
 	int Nd;
 	vec x_up, x_low;;
 	double eps;
-	Ran myran;  
+	Ran myran;
+	vecvec disvec;  
 public:
 	// The vectors 'steps', 'errors' and 'vals' are the data structures where the number
 	// of iterations of the method, the errors at each iteration, and the value of the
@@ -50,14 +56,16 @@ public:
 	// before the MC integrator will cease. To avoid overflow, the number of steps M must 
 	// be a long unsigned integer as must be M_init and M_max must also be since there are
 	// functions which compare these variables. The bool 'importance' acts as the switch 
-	// to implement importance sampling.
+	// to implement importance sampling, whilst 'transform' (defaulted to true) is the 
+	// switch for the transformation method, which if false will instead rely on the user-
+	// supplied vector of vectors containing arbitrariy distributed random numbers.
 
 	vec steps, errors, vals, X;
 	unsigned long int M, M_init, M_max;
 	double R, V, fsum, fsq; 	
-	bool importance;
+	bool importance, transform;
 	Mcint(func fnc, vec a, vec b, int N, int seed, double tol, int Mstart, 
-	      bool imp, func pdf, unifun cdf, unsigned long int stepmax);
+	      bool imp, func pdf, unifun cdf, unsigned long int stepmax, bool transform=true, vecvec distri={});
 	
 	void sample();
 
