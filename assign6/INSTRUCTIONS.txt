@@ -8,6 +8,7 @@ multifunc.cpp  - Program corresponding to question 2 which contains the integran
 		 the probability distributions, and the inverse cummulative distributions
 		 for the program erfrand.cpp to work.
 multifunc.h    - Header file for the function used to answer question 2.
+rand.h         - Random number generator from assignment 3 for uniform deviate generation
 mcint.h        - Class declaration of the Mcint class used to perform the MC integration
 		 in question 2 and produce data to be plotted for the report. Also contains
 		 declarations of the member functions
