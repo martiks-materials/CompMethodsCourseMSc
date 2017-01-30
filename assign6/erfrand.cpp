@@ -64,8 +64,8 @@ int main() {
 	outfile2b.close();
 	outfile3a.close();
 	outfile3b.close();
-        cout << "Uniform Sampling: " << Monte1.fsum_new << " +/- " << Monte1.error() <<  endl;
-	cout << "Importance Sampling (PDF1): " << Monte2.fsum_new << " +/- " << Monte2.error() <<  endl;
-	cout << "Importance Sampling (PDF2): " << Monte3.fsum_new << " +/- " << Monte3.error() <<  endl;
+        cout << "Uniform Sampling: " << Monte1.fsum << " +/- " << Monte1.error() <<  endl;
+	cout << "Importance Sampling (PDF1): " << Monte2.fsum << " +/- " << Monte2.error() <<  endl;
+	cout << "Importance Sampling (PDF2): " << Monte3.fsum << " +/- " << Monte3.error() <<  endl;
         return 0;
 }

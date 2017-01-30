@@ -1,0 +1,36 @@
+Computational Methods Assignment 6 Folder - Monte Carlo Integration
+
+Contents:
+
+erfrand.cpp    - Program which answers question 2 by estimating the error function
+	         evaluated at 2 using several methods of MC integration.
+multifunc.cpp  - Program corresponding to question 2 which contains the integrand,
+		 the probability distributions, and the inverse cummulative distributions
+		 for the program erfrand.cpp to work.
+multifunc.h    - Header file for the function used to answer question 2.
+mcint.h        - Class declaration of the Mcint class used to perform the MC integration
+		 in question 2 and produce data to be plotted for the report. Also contains
+		 declarations of the member functions
+mcint.cpp      - Contains the definitions of the member functions for the Mcint class
+Makefile       - Compiles the erfrand.cpp program
+report6.pdf    - Report describing methods and discussing displayed results
+converge.p     - Contains instructions for gnuplot to view the convergence of data with 
+		 sample size
+
+
+Instructions for assign6 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+Using the Makefile provided, type 'make' into the terminal. This will compile
+'erfrand.cpp', 'multifunc.cpp' and 'mcint.cpp' providing executables 'erfrand.x'. 
+To run these, enter './erfrand.x' into the terminal, and the results used in this
+assignment's report will be outputted. Additionally, '.dat' files will be produced 
+containing the convergence data of from each MC iteration.
+
+VIEWING GRAPH:
+To plot the raw data in gnuplot (assuming gnuplot is installed), type 'gnuplot converge.p'
+into the terminal to display both graphs in this assignment. This will also produce individual '.png'
+files for each.
+
+- Martik Aghajanian, Cohort 8.
+

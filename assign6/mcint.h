@@ -54,7 +54,7 @@ public:
 
 	vec steps, errors, vals, X;
 	unsigned long int M, M_init, M_max;
-	double R, V, fsum_old, fsum_new, fsq_old, fsq_new; 	
+	double R, V, fsum, fsq; 	
 	bool importance;
 	Mcint(func fnc, vec a, vec b, int N, int seed, double tol, int Mstart, 
 	      bool imp, func pdf, unifun cdf, unsigned long int stepmax);
