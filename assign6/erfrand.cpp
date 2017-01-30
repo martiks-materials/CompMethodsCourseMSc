@@ -25,7 +25,7 @@ int main() {
 	// that the integration aspires to achieve, and for which the integration will cease if the 
 	// maximum steps is not reached, is 'eps'. 
 
-	int Ndim(1), mstart(500), see(142), maxsteps(22);
+	int Ndim(1), mstart(500), see(42), maxsteps(22);
 	unsigned long int mmax = int(mstart*pow(2, maxsteps));
 	double eps(1E-6);
 
@@ -64,8 +64,8 @@ int main() {
 	outfile2b.close();
 	outfile3a.close();
 	outfile3b.close();
-        cout << "Uniform Sampling: " << Monte1.fsum_new << " +/- " << Monte1.error2() <<  endl;
-	cout << "Importance Sampling (PDF1): " << Monte2.fsum_new << " +/- " << Monte2.error2() <<  endl;
-	cout << "Importance Sampling (PDF2): " << Monte3.fsum_new << " +/- " << Monte3.error2() <<  endl;
+        cout << "Uniform Sampling: " << Monte1.fsum_new << " +/- " << Monte1.error() <<  endl;
+	cout << "Importance Sampling (PDF1): " << Monte2.fsum_new << " +/- " << Monte2.error() <<  endl;
+	cout << "Importance Sampling (PDF2): " << Monte3.fsum_new << " +/- " << Monte3.error() <<  endl;
         return 0;
 }
