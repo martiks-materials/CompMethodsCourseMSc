@@ -1,3 +1,7 @@
+// Computational Methods Assignment 8 - MC Integration
+//
+// Collection of member functions for the class 'Mcint' which allow 
+// it to evaluate the error function at 2. 
 #include <iostream>
 #include <vector>
 #include <cmath>
