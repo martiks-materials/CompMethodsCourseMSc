@@ -65,8 +65,8 @@ void Mcint::sample(){
 	// taken equal to the number of samples currently used in 'fsum' and 'fsquare',
 	// such that the total sample size doubles. This creates dummies of the current
 	// variables, modifies them and updates them so that none of the member variables
-	// are accidentally changed during the samples (e.g. M_old needs to be fixed)
-	// The temporary sum and sum of squares must me multiplied by current steps.
+	// are accidentally changed during sampling (e.g. M_old needs to be fixed)
+	// The temporary sum and sum of squares must be multiplied by current steps.
 	double fsum_temp = M*fsum, fsq_temp = M*fsq ;
 	int M_old = M;
 	for(int i(0); i<M_old; i++){
