@@ -68,7 +68,6 @@ int main() {
 	}
 	// Of all the chains, the maximum one is outputted to the terminal along with the value which maximises it.
 	auto result1 = max_element(begin(funcmaxes1), end(funcmaxes1));
-	int index1 = distance(funcmaxes1.begin(), result1);
 	cout << "Largest Function maximum (Fixed Proposal Function): " << double(*result1) << " at ";
 	for(int i(0);i<numchains; i++){
 		if(abs(funcmaxes1[i]-double(*result1))<1E-10){
@@ -79,7 +78,6 @@ int main() {
 	cout << numcon1 << "/" << numchains << " converged." << endl;
 	
 	auto result2 = max_element(begin(funcmaxes2), end(funcmaxes2));
-	int index2 = distance(funcmaxes2.begin(), result2);
 	cout << "Largest Function maximum (Variable Proposal Function): " << double(*result2) << " at ";
 	for(int i(0);i<numchains; i++){
 		if(abs(funcmaxes2[i]-double(*result2))<1E-10){

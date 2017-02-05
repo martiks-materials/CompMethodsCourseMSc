@@ -272,8 +272,8 @@ public:
 						xmax[i] = xi[i];
 					}
 				}
-				int div = int(0.01*maxstep);
 				/*
+				int div = int(0.01*maxstep);
 				if(counter%div==0){		
 					cout << "Step " << counter-burntime << " after burn-in. X_variance = ( ";
 					for(int i(0); i< Nd; i++){

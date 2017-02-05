@@ -69,7 +69,6 @@ int main() {
 	}
 	// Of all the chains, the maximum one is outputted to the terminal along with the value which maximises it.
 	auto result = max_element(begin(funcmaxes), end(funcmaxes));
-	int index = distance(funcmaxes.begin(), result);
 	cout << "Largest Function maximum: " << double(*result) << " at ";
 	for(int i(0);i<numchains; i++){
 		if(abs(funcmaxes[i]-double(*result))<1E-10){
