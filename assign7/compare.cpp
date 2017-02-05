@@ -1,6 +1,13 @@
 // Computational Methods - Assignment 7: Markov Chain Monte Carlo
 // Martik Aghajanian
 //
+// Question 2: Comparing fixed proposal functions
+// This computes the number of function evaluations of the Markov
+// Chain Monte Carlo method for mapping and optimising a function, for
+// both a fixed proposal function and a proposal function which varies
+// after the burn-in period. This can be applied to a proposal function
+// which is a product of independent Gaussians or a multivariate normal
+// distribution.
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -40,16 +47,18 @@ int main() {
 			xinit1.push_back(starter1);
 			xinit2.push_back(starter2);
 		}
-		
-		cout << "|_Markov_Chain__" << i+1<< " (Fixed_Prop._Function)____starting_at__("<< xinit1[0]<< ",_" << xinit1[1]<< ")___________|" << endl;
-		MarkovChain Marko1 = {rosenbrock, Ndim, xinit1, burn, see, startsig, epsig, maxi, 10, true, sig_period, check_period};
+		cout << "__________________________________________________________________" << endl;	
+		cout << "Markov Chain " << i+1<< " (Fixed Prop. Function) starting at ("<< xinit1[0]<< ", " << xinit1[1]<< ")" << endl;
+		MarkovChain Marko1 = {rosenbrock, Ndim, xinit1, burn, see, startsig, epsig, maxi, 10, true, sig_period, check_period, false};
 		Marko1.optimise();
 		cout << "Max(f(x)) =  " << Marko1.maxf << " at (" << Marko1.xmax[0] << ", " << Marko1.xmax[1] << " )" <<  " with variance " << Marko1.variance() << endl;
 		cout << Marko1.accepts << " out of " << Marko1.func_evals/2 << " (times 2) function evaluations" << endl;
 		numval1 += Marko1.func_evals;	
 	
-		cout << "|_Markov_Chain__" << i+1<< " (Variable__Prop._Function)____starting_at__("<< xinit2[0]<< ",_" << xinit2[1]<< ")___________|" << endl;
-		MarkovChain Marko2 = {rosenbrock, Ndim, xinit2, burn, see, startsig, epsig, maxi, 10, false, sig_period, check_period};
+		
+		cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ __" << endl;	
+		cout << "Markov Chain " << i+1<< " (Variable Prop. Function) starting at ("<< xinit2[0]<< ", " << xinit2[1]<< ")" << endl;
+		MarkovChain Marko2 = {rosenbrock, Ndim, xinit2, burn, see, startsig, epsig, maxi, 10, false, sig_period, check_period, false};
 		Marko2.optimise();
 		cout << "Max(f(x)) =  " << Marko2.maxf << " at (" << Marko2.xmax[0] << ", " << Marko2.xmax[1] << " )" <<  " with variance " << Marko2.variance() << endl;
 		cout << Marko2.accepts << " out of " << Marko2.func_evals/2 << " (times 2) function evaluations" << endl;
@@ -67,6 +76,7 @@ int main() {
 		}
 	}
 	// Of all the chains, the maximum one is outputted to the terminal along with the value which maximises it.
+	cout << "__________________________________________________________________" << endl;	
 	auto result1 = max_element(begin(funcmaxes1), end(funcmaxes1));
 	cout << "Largest Function maximum (Fixed Proposal Function): " << double(*result1) << " at ";
 	for(int i(0);i<numchains; i++){
@@ -77,6 +87,7 @@ int main() {
 	cout << endl << numval1 << " function evaluations." << endl;
 	cout << numcon1 << "/" << numchains << " converged." << endl;
 	
+	cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ __" << endl;	
 	auto result2 = max_element(begin(funcmaxes2), end(funcmaxes2));
 	cout << "Largest Function maximum (Variable Proposal Function): " << double(*result2) << " at ";
 	for(int i(0);i<numchains; i++){

@@ -1,3 +1,12 @@
+// Computational Methods Assignment 7 - Markov Chain Monte Carlo
+// Martik Aghajanian, Cohort 8
+// 
+// Class declaration for the Markov Chain Monte Carlo function exploration
+// and maximisation class which takes in an initialised random state and specified
+// initial variables, mapping out and optimising a specific user-defined function.
+// Options are available for the proposal function to be fixed after burn-in period
+// and also to have a multivariate Gaussian as the proposal function too.
+
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -32,6 +41,7 @@ private:
 public:
 	// 'maxf': Current maximum function evaluation, 'varold': storage variable for variance
 	// 'converged': Indicator of algorithm termination due to convergence of variance
+	// 'multivar': Indicator of multivariate Gaussian proposal function
 	// 'fvals': Container for function evaluations after burn-in period exceeded
 	// 'fburn': Container for function evaluations during burn-in period
 	// 'xsum': Container for sum of x vector values over a specified 'sig_period'
@@ -41,7 +51,8 @@ public:
 	// 'xmax': Current x vector for which function is maximal, corresponding to 'maxf'
 	// 'xvals': Container for all post-burn-in period x vector values
 	// 'xburn': Container for x vector values during burn-in
-	// 'sigvals': Container for standard deviations of the proposal function for x
+	// 'sigvals': Container for standard deviations of the proposal function for xi
+	// 'cov_mat': Updatable covariance matrix
 	// 'Nd': Dimension of 'xi', 'burntime': Length of burn-in period, 'counter': of steps
 	// 'maxstep': Maximum number of successful Metropolis steps before non-convergence termination
 	// 'minstep': Minimum number of successful Metropolis steps before convergence-based termination
@@ -50,13 +61,13 @@ public:
 	// 'func_evals': Number of function evaluations, 'accepts': Number of accepted Metropolis steps
 
 	double maxf, varold;
-	bool converged;
+	bool converged, multivar;
 	vec fvals, fburn, xsum, xsq, xsum_b, xsq_b, xmax;
-	vecvec xvals, xburn, sigvals;
+	vecvec xvals, xburn, sigvals, cov_mat;
 	int Nd, burntime, counter, maxstep, minstep, fvalcount, sig_period, check_period, func_evals, accepts;
 	
 	MarkovChain(func fn, int dim, vec init, int b, int seed, vec sig_init, double epsy, int maxs, 
-		    int mins, bool fix, int sigper, int checkper) {
+		    int mins, bool fix, int sigper, int checkper, bool multi) {
 		// Initialize member function and variables for optimisation, seeding generator 
 		f = fn;
 		Nd = dim;
@@ -64,9 +75,11 @@ public:
 		xi = init;
 		sig = sig_init;
 
-		// Variables for Gaussian Distribution via Box-Muller
+		// Variables for Gaussian Distribution via Box-Muller or for multivariate
+		// normal distribution.
 		stored = 0.;
 		extra = false;
+		multivar = multi;
 		
 		// Variables for counting steps and identifying regions of chain
 		counter = 0;
@@ -83,11 +96,23 @@ public:
 		fsq = 0;
 		maxf = 0;
 		xmax = xi;
-		eps = epsy;
+		eps = (multivar)?(epsy*10):epsy;
 		sig_period = sigper;
 		check_period=checkper;
 		fixprop = fix;
 
+		// For multivariate Gaussian, initialises covariance matrix with initial 
+		// standard deviation (squared) which lasts until 'sig_period' has been exceeded.
+		if(multivar){
+			for(int i(0); i< Nd; i++){
+				vec cov_column;
+				for(int j(0); j< Nd; j++){
+					double value = (i==j)?(sig_init[i]*sig_init[i]):0;
+					cov_column.push_back(value);
+				}
+				cov_mat.push_back(cov_column);
+			}
+		}
 		// Makes room for Nd vectors, each tracks the value of a particular variable.
 		for(int i(0); i< Nd; i++){
 			xvals.push_back({});
@@ -120,7 +145,54 @@ public:
 			return stored;
 		}
 	}
-	
+
+	vec multivarnorm() {
+		// Cholesky Decomposition to then obtain a multivariate Gaussian distribution 
+		// from a uniform deviate generator. L is a lower triangular matrix for which
+		// L multiplied by it's transpose will produce the covariance matrix. It 
+		// essentially acts as the square root of the covariance matrix.
+
+		vecvec L;
+
+		// Multivariate normal distribution and Box-Muller generated x vectors
+		vec x_mv, x_bm;
+		for(int i(0); i< Nd; i++){
+			x_bm.push_back(normran());
+		}
+		// Sets empty L matrix and sets up covariance matrix
+		for(int i(0); i< Nd; i++) {
+			// For a vector of vectors, the [i][j] element is the jth element of the ith
+			// vector, so each vector is a column.
+			vec L_column;
+			for(int j(0); j<Nd; j++) {
+				L_column.push_back(0);
+			}
+			L.push_back(L_column);
+		}
+		// Now implements the algorithm for Cholesky decomposition of the Covariance matrix.
+		for(int i(0); i< Nd; i++) {
+			for(int j(0); j < i+1; j++) {
+				double sum = 0;
+				for(int k(0); k < Nd; k++) {
+					sum += L[k][i]*L[k][j];
+				}
+				L[j][i] = (i==j)?sqrt(cov_mat[i][i]-sum):((cov_mat[j][i]-sum)/L[j][j]);
+			}
+		}
+		// Matrix multiplication for new multivariate normal distributed vector. This is done in
+		// such a way that the mean of this distribution is the vector of current x values and the
+		// covariance matrix of the current 'sig_period' represents the spread of this distribution.
+		// This is the multidimensional equivalent of rescaling the normal distributed random variable
+		// to have a specific mean and standard deviation.
+		for(int i(0); i< Nd; i++){
+			double x_comp = xi[i];
+			for(int j(0); j <Nd; j++){
+				x_comp += L[j][i]*x_bm[i];
+			}
+			x_mv.push_back(x_comp);
+		}
+		return x_mv;
+	}
 
 	bool iterate() {
 		// Performs one step of the Metropolis algorithm to find the next point in
@@ -128,14 +200,23 @@ public:
 		// of acceptance. The newly generated 'x_temp' is tested.
 		vec x_temp;
 		bool accept;
-		for(int i(0); i < Nd; i++) {
-			// The Box-Muller transform produces a Gaussian for which the mean is
-			// zero and the standard deviation is 1, so it must be re-scaled here.
-			x_temp.push_back(xi[i] + sig[i]*normran());
+		if(!multivar){
+			// For the case of a proposal function which is just a product of
+			// independent gaussian, the Box-Muller Transform is used.
+			for(int i(0); i < Nd; i++) {
+				// The Box-Muller transform produces a Gaussian for which the mean is
+				// zero and the standard deviation is 1, so it must be re-scaled here.
+				x_temp.push_back(xi[i] + sig[i]*normran());
+			}
 		}
-		
-		// Calculated the relative value of the function which works as a probability
-		// if less than unity, causing automatic acceptance
+		else {
+			// For the case of a multivariate proposal function, the trial x vector is produced 
+			// entirely by a separate function here.
+			x_temp = multivarnorm();	
+		}
+
+		// Metropolis Algorithm Step: Calculated the relative value of the function which works 
+		// as a probability if less than unity, causing automatic acceptance
 		double quant = (*f)(x_temp);
 		double alpha = quant/(*f)(xi);
 		func_evals += 2;
@@ -158,11 +239,12 @@ public:
 			// used to remove old terms in the 'xsum(_b)' and 'xsq(_b)' values
 			int position = (burnin)?(counter):(counter-burntime);	
 
-			if(burnin){	
+			if(burnin){
+				// I.e. if the system state is still in the burn-in period.
 				for(int i(0); i<Nd; i++){
 					// Re-evaluates the sum of each x components over the chain and the sum of 
 					// the squares of each x component over the chain so that their respective
-					// variances are only taken over a finite 'sig_period'
+					// variances are only taken over a finite 'sig_period'.
 					xsum_b[i] += xi[i];
 					xsq_b[i] += xi[i]*xi[i];
 					xsum_b[i] -= (position > sig_period)? xvals[i][position-1-sig_period]:0; 
@@ -173,7 +255,26 @@ public:
 					// if necessary. The proposal function is not changed until the number of steps taken
 					// is sufficient to calculate a suitable variance in each x component to change it.
 					xvals[i].push_back(xi[i]);
-					sig[i]  = (counter>=sig_period)?sqrt(x_variance(i)):sig[i];
+					if(!multivar){
+						// If the normal distribution is a simple product of  Gaussian's, then the 
+						// individual standard deviations of the Gaussiansin each direction is updated.
+						sig[i]  = (counter>=sig_period)?sqrt(x_variance(i)):sig[i];
+					}
+					else {
+						// If the proposal function is a multivariate Gaussian with coupled variables, then
+						// the covariance matrix used is updated instead of the standard deviation of x vectors
+						for(int i(0); i< Nd; i++) {	
+							for(int j(0); j<Nd; j++) {
+								if(i==j){
+									cov_mat[i][i] = (counter>=sig_period)?x_variance(i):cov_mat[i][i];;
+								}
+								else {
+									cov_mat[j][i] = (counter>=sig_period)?covariance(i, j):cov_mat[j][i];
+								}
+						
+							}
+						}
+					}
 				}
 				fsum += quant;
 				fsq += quant*quant;
@@ -194,13 +295,17 @@ public:
 							}
 						}
 						if(!corr){
+							// If the autocorrelation function produces a values for ALL components
+							// that are below the 0.05 threshold, then the burn-in period is ended.
+
+							cout << "Autocorrelation func. r(" << k << ") = ";
 							for(int i(0); i< Nd; i++){	
-								cout << "r(" << k << ") = " << rk[i] << " for component " << i+1<< endl; 
+								cout << rk[i] << "  ";  
 							}
+							cout << endl;
 							burnin=false;
 							burntime = counter;
 							varold = variance();
-							cout << "Burnin Variance: " << varold << endl;
 		
 							// Here it resets the recorded values of function and points visited
 							// with the burn-in points stored in an additional vector. This is so 
@@ -222,7 +327,6 @@ public:
 
 					burnin=false;
 					varold = variance();
-					cout << "Burnin Variance: " << varold << endl;
 
 					// Here it resets the recorded values of function and points visited
 					// with the burn-in points stored in an additional vector. This is so 
@@ -238,9 +342,9 @@ public:
 				}
 			}
 			else {
-			// If the system state is not in the burn-in period, then the variances and values are 
-			// still updated and the convergence of the standard deviation of the function evaluations
-			// is assessed to determine stopping the MCMC optimisation.
+				// If the system state is not in the burn-in period, then the variances and values are 
+				// still updated and the convergence of the standard deviation of the function evaluations
+				// is assessed to determine stopping the MCMC optimisation.
 				for(int i(0); i<Nd; i++){
 					xsum[i] += xi[i];
 					xsq[i] += xi[i]*xi[i];
@@ -248,13 +352,32 @@ public:
 					xsq[i] -= (position > sig_period)? pow(xvals[i][position-1-sig_period], 2):0; 
 				}
 				for(int i(0); i < Nd; i++){
-					// Update the xvals travelled to,  and the sigmas with them.
+					// Update the xvals travelled to, and the sigmas with them.
 					xvals[i].push_back(xi[i]);
 					sigvals[i].push_back(sig[i]);
-					if(!fixprop) {	
-						// If the proposal function is not fixed after burn-in period then the
-						// sigma of the proposal function is updated accordingly.
-						sig[i] = (counter-burntime>=sig_period)?sqrt(x_variance(i)):sig[i];
+					if(!fixprop) {
+						// If the proposal function is not fixed after the burn-in period then either the
+						// standard deviation or covariance matrix is updated depending on whether or not
+						// the proposal function is multivariate or not.	
+						if(!multivar){
+							// If the proposal function is not fixed after burn-in and is a product
+							// of independent Gaussians.
+							sig[i] = (counter-burntime>=sig_period)?sqrt(x_variance(i)):sig[i];
+						}
+						else {
+							// If the proposal function is not fixed after burn-in and is a multivariate 
+							// Gaussian with coupled variables, then the covariance matrix is updated 
+							for(int i(0); i< Nd; i++) {	
+								for(int j(0); j<Nd; j++) {
+									if(i==j){
+										cov_mat[i][i] = (counter-burntime>=sig_period)?x_variance(i):cov_mat[i][i];
+									}
+									else {
+										cov_mat[j][i] = (counter-burntime>=sig_period)?covariance(i, j):cov_mat[j][i];
+									}
+								}
+							}
+						}
 					}	
 				}
 				fvals.push_back(quant);
@@ -274,6 +397,7 @@ public:
 				}
 				/*
 				int div = int(0.01*maxstep);
+			
 				if(counter%div==0){		
 					cout << "Step " << counter-burntime << " after burn-in. X_variance = ( ";
 					for(int i(0); i< Nd; i++){
@@ -348,5 +472,21 @@ public:
 		}
 		return numer/denom;
 	}
+	
+	double covariance(int i, int j) {
+		// Produces the covariance matrix of a windwo of particular x values taken over
+		// 'sig_period' steps.
+		double M = double(sig_period);
+		// Number of vals;
+		int position = (burnin)?(counter):(counter-burntime);	
+		double mean_i = ((burnin)?xsum_b[i]:xsum[i])/M;
+		double mean_j = ((burnin)?xsum_b[j]:xsum[j])/M;
+		double covar(0);
+		for(int k = (position-sig_period);k<position; k++){
+			covar += ((xvals[i][k]-mean_i)*(xvals[j][k]-mean_j))/M;
+		}
+		return covar;
+	}
+
 };
 

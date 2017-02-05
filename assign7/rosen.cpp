@@ -1,6 +1,7 @@
 // Computational Methods - Assignment 7: Markov Chain Monte Carlo
 // Martik Aghajanian
 //
+// Question 1:
 // Program for mapping and optimising the Rosenbrock function using 
 // Markov Chain Monte Carlo. This corresponds to answering question
 // 1 of the assignment and outputs files for the mapped function 
@@ -42,10 +43,15 @@ int main() {
 			double starter = -range + (2*range*distributor.doub());
 			xinit.push_back(starter);
 		}
-		cout << "|_Markov_Chain__" << i+1<< "____starting_at__("<< xinit[0]<< ",_" << xinit[1]<< ")___________|" << endl;
+		cout << "__________________________________________________________" << endl;
+		cout << "Markov Chain " << i+1<< " starting at ("<< xinit[0]<< ", " << xinit[1]<< ") " << endl;
+		
 		// For each randomly initialised state (starting point and seed), the Markov Chain is set off
 		// to optimise with the proposal function fixed after the burn-in period (fixprop=true)
-		MarkovChain Marko = {rosenbrock, Ndim, xinit, burn, see, startsig, epsig, maxi, 10, true, sig_period, check_period};
+		// Also the multivariate bool at the end is set to false to have a proposal function which is
+		// a product of independent Gaussians.
+
+		MarkovChain Marko = {rosenbrock, Ndim, xinit, burn, see, startsig, epsig, maxi, 10, true, sig_period, check_period, false};
 		Marko.optimise();
 		for(int i(0); i < Marko.fvalcount; i++) {
 			for(int j(0); j < Marko.Nd; j++) {
