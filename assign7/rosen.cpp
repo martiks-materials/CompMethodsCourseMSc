@@ -23,7 +23,8 @@ int main() {
 	for(int i(0); i< Ndim; i++){
 		xmaxes.push_back({});
 	}
-	ofstream outfile("markovdata.dat");	
+	ofstream outfile1("markovdata.dat");
+	ofstream outfile2("burndata.dat");	
 	for(int i(0); i<numchains; i++){
 		// Produces 'numchains' distinct Markov chains at various starting points with various seeds.
 		int see = distributor.int64();
@@ -39,9 +40,15 @@ int main() {
 		Marko.optimise();
 		for(int i(0); i < Marko.fvalcount; i++) {
 			for(int j(0); j < Marko.Nd; j++) {
-				outfile << Marko.xvals[j][i] << " ";
+				outfile1 << Marko.xvals[j][i] << " ";
 			}
-			outfile << Marko.fvals[i] << " " << endl;
+			outfile1 << Marko.fvals[i] << " " << endl;
+		}
+		for(int i(0); i< Marko.burntime; i++){
+			for(int j(0); j< Marko.Nd; j++){
+				outfile2 << Marko[j][i] << " ";
+			}
+			outfile << endl;
 		}
 		cout << "Max(f(x)) =  " << Marko.maxf << " at (" << Marko.xmax[0] << ", " << Marko.xmax[1] << " )" <<  " with variance " << Marko.variance() << endl;
 		numcon += (Marko.converged)?1:0;
