@@ -16,7 +16,7 @@
 double rosenbrock(vec x) {
 	// Returns the Rosenbrock function if the output is positive and
 	// returns 0 if negative, which aids the Metropolis Algorithm.
-	double result = 1000 - (1-x[0])*(1-x[0]) -100*pow(((x[0]*x[0]) - x[1]), 2);
+	double result =  1000 - (1-x[0])*(1-x[0]) -100*pow(((x[0]*x[0]) - x[1]), 2);
 	return (result>0)?result:0;
 }
 
