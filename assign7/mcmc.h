@@ -24,7 +24,7 @@ public:
 	bool converged;
 	vec fvals, fburn, xsum, xsq, xsum_b, xsq_b, xmax;
 	vecvec xvals, xburn, sigvals;
-	int Nd, burntime, counter, maxstep, minstep, fvalcount, sig_period, check_period;
+	int Nd, burntime, counter, maxstep, minstep, fvalcount, sig_period, check_period, func_evals, accepts;
 	MarkovChain(func fn, int dim, vec init, int b, int seed, vec sig_init, double epsy, int maxs, int mins, bool fix, int sigper, int checkper) {
 		f = fn;
 		Nd = dim;
@@ -45,6 +45,8 @@ public:
 		fvalcount = 0;
 		maxstep = maxs;
 		minstep = mins;
+		func_evals = 0;
+		accepts = 0;
 
 		// Variables for determining the variance of the function and x points
 		fsum = 0;
@@ -93,7 +95,9 @@ public:
 		for(int i(0); i < Nd; i++) {
 			x_temp.push_back(xi[i] + sig[i]*normran());
 		}
-		double alpha = (*f)(x_temp)/(*f)(xi);
+		double quant = (*f)(x_temp);
+		double alpha = quant/(*f)(xi);
+		func_evals += 2;
 		if(alpha>1.){
 			xi = x_temp;
 			accept = true;
@@ -107,8 +111,9 @@ public:
 		// CONVERGENCE AND RECORDING STEPS
 		if(accept){
 			counter++;
+			accepts++;
 			int position = (burnin)?(counter):(counter-burntime);	
-			double quant = (*f)(xi);
+			//double quant = (*f)(xi);
 			if(burnin){	
 				for(int i(0); i<Nd; i++){
 					// Re-evaluates the sum of each x components over the chain and the sum of 
