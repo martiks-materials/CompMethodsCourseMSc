@@ -18,8 +18,8 @@ int main() {
 	distributor.seed(42); 
 	vec funcmaxes, startsig = {5, 5};
 	vecvec xmaxes;
-	int numchains(10), sig_period(1E2), burn(1E4), maxi(1E6), Ndim(2);
-	double epsig(1E-10), range(2.0);
+	int numchains(10), numcon(0), sig_period(1E2), check_period(1E2),  burn(1E4), maxi(1E6), Ndim(2);
+	double epsig(1E-8), range(2.0);
 	for(int i(0); i< Ndim; i++){
 		xmaxes.push_back({});
 	}
@@ -32,9 +32,10 @@ int main() {
 			double starter = -range + (2*range*distributor.doub());
 			xinit.push_back(starter);
 		}
+		cout << "|_Markov_Chain__" << i+1<< "____starting_at__("<< xinit[0]<< ",_" << xinit[1]<< ")___________|" << endl;
 		// For each randomly initialised state (starting point and seed), the Markov Chain is set off
 		// to optimise with the proposal function fixed after the burn-in period (fixprop=true)
-		MarkovChain Marko = {rosenbrock, Ndim, xinit, burn, see, startsig, epsig, maxi, 10, true, sig_period};
+		MarkovChain Marko = {rosenbrock, Ndim, xinit, burn, see, startsig, epsig, maxi, 10, true, sig_period, check_period};
 		Marko.optimise();
 		for(int i(0); i < Marko.fvalcount; i++) {
 			for(int j(0); j < Marko.Nd; j++) {
@@ -43,6 +44,7 @@ int main() {
 			outfile << Marko.fvals[i] << " " << endl;
 		}
 		cout << "Max(f(x)) =  " << Marko.maxf << " at (" << Marko.xmax[0] << ", " << Marko.xmax[1] << " )" <<  " with variance " << Marko.variance() << endl;
+		numcon += (Marko.converged)?1:0;
 		funcmaxes.push_back(Marko.maxf);
 		for(int i(0) ; i<Ndim; i++){	
 			xmaxes[i].push_back(Marko.xmax[i]);
@@ -52,6 +54,7 @@ int main() {
 	auto result = max_element(begin(funcmaxes), end(funcmaxes));
 	int index = distance(funcmaxes.begin(), result);
 	cout << "Largest Function maximum: " << *result  << " at (" << xmaxes[0][index] << ", " << xmaxes[1][index] << ")"<< endl;
+	cout << numcon << "/" << numchains << " converged." << endl;
 	outfile.close();
 	return 0;
 }

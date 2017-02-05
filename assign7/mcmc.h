@@ -21,19 +21,21 @@ public:
 	// max of function maxf, storage varaible varold, 
 	// vectors fvals stores function values, xsig stored the sum of 
 	double maxf, varold;
+	bool converged;
 	vec fvals, fburn, xsum, xsq, xsum_b, xsq_b, xmax;
 	vecvec xvals, xburn, sigvals;
-	int Nd, bperiod, counter, maxstep, minstep, fvalcount, sig_period;
-	MarkovChain(func fn, int dim, vec init, int b, int seed, vec sig_init, double epsy, int maxs, int mins, bool fix, int sigper) {
+	int Nd, burntime, counter, maxstep, minstep, fvalcount, sig_period, check_period;
+	MarkovChain(func fn, int dim, vec init, int b, int seed, vec sig_init, double epsy, int maxs, int mins, bool fix, int sigper, int checkper) {
 		f = fn;
 		Nd = dim;
 		myran.seed(seed);
-		bperiod = b;
+		burntime = b;
 		burnin = true;
 		fixprop = fix;
 		xi = init;
 		sig = sig_init;
 		sig_period = sigper;
+		check_period=checkper;
 		// Variables for Gaussian Distribution via Box-Muller
 		stored = 0.;
 		extra = false;
@@ -105,23 +107,78 @@ public:
 		// CONVERGENCE AND RECORDING STEPS
 		if(accept){
 			counter++;
-			int position = (burnin)?(counter):(counter-bperiod);	
+			int position = (burnin)?(counter):(counter-burntime);	
 			double quant = (*f)(xi);
 			if(burnin){	
 				for(int i(0); i<Nd; i++){
+					// Re-evaluates the sum of each x components over the chain and the sum of 
+					// the squares of each x component over the chain so that their respective
+					// variances are only taken over a finite 'sig_period'
 					xsum_b[i] += xi[i];
 					xsq_b[i] += xi[i]*xi[i];
 					xsum_b[i] -= (position > sig_period)? xvals[i][position-1-sig_period]:0; 
 					xsq_b[i] -= (position > sig_period)? pow(xvals[i][position-1-sig_period], 2):0; 
 				}
 				for(int i(0); i<Nd; i++) {
+					// Update the values of x recorded by the class and update the proposal function
+					// if necessary. The proposal function is not changed until the number of steps taken
+					// is sufficient to calculate a suitable variance in each x component to change it.
 					xvals[i].push_back(xi[i]);
-					// allow for one sigma_period before changing the proposal function
 					sig[i]  = (counter>=sig_period)?sqrt(x_variance(i)):sig[i];
 				}
 				fsum += quant;
 				fsq += quant*quant;
-				if(counter == bperiod){
+				// Here, if the counter reaches a whole period of 'burn-in check', then the autocorrelation
+				// is checked for all values to see if any of them are below the threshold.
+				if(counter%check_period == 0){ 
+					for(int k(1); k< counter; k++) {
+						vec rk;
+						for(int i(0); i< Nd; i++) {
+							double rki = abs(autocorr(k, i));
+							rk.push_back(rki);
+						}
+						bool corr = false;
+						for(int i(0); i<Nd ; i++){
+							if(rk[i]>0.05){
+								corr=true;
+							}
+						}
+						if(!corr){
+							for(int i(0); i< Nd; i++){	
+								cout << "r(" << k << ") = " << rk[i] << " for component " << i+1<< endl; 
+							}
+							burnin=false;
+							burntime = counter;
+							//varold = fmean();  //
+							varold = variance();
+							cout << "Burnin Variance: " << varold << endl;
+		
+							// Here it resets the recorded values of function and points visited
+							// with the burn-in points stored in an additional vector.
+							xburn = xvals;
+							for(int i(0); i<Nd; i++){
+								xvals[i].clear();
+							}
+							fsum = 0;
+							fsq = 0;
+							break;
+						}	
+					}
+				}						
+				if(burnin&&(counter == burntime)){	
+					burnin=false;
+					//varold = fmean();  //
+					varold = variance();
+					cout << "Burnin Variance: " << varold << endl;
+
+					// Here it resets the recorded values of function and points visited
+					// with the burn-in points stored in an additional vector.
+					xburn = xvals;
+					for(int i(0); i<Nd; i++){
+						xvals[i].clear();
+					}
+					fsum = 0;
+					fsq = 0;
 					cout <<  "Final sig after burnin  = " << sig[0] << ", " << sig[1] << endl;
 				}
 			}
@@ -138,15 +195,15 @@ public:
 					xvals[i].push_back(xi[i]);
 					sigvals[i].push_back(sig[i]);
 					if(!fixprop) {	
-						sig[i] = (counter-bperiod>=sig_period)?sqrt(x_variance(i)):sig[i];
+						sig[i] = (counter-burntime>=sig_period)?sqrt(x_variance(i)):sig[i];
 					}	
 				}
 				fvals.push_back(quant);
 				fvalcount++;
 				// Remove the value from fsum so we keep the window moving
-				double removed = (counter > (2*bperiod))?fvals[counter-1-2*bperiod]:0;
-				fsum -= (counter > (2*bperiod))?removed:0;
-				fsq -= (counter > (2*bperiod))?(removed*removed):0;
+				double removed = (counter > (2*burntime))?fvals[counter-1-2*burntime]:0;
+				fsum -= (counter > (2*burntime))?removed:0;
+				fsq -= (counter > (2*burntime))?(removed*removed):0;
 				fsum += quant;
 				fsq += quant*quant;
 				if(quant > maxf){
@@ -156,14 +213,16 @@ public:
 					}
 				}
 				int div = int(0.01*maxstep);
+				/*
 				if(counter%div==0){		
-					cout << "Step " << counter-bperiod << " after burn-in. X_variance = (";
+					cout << "Step " << counter-burntime << " after burn-in. X_variance = ( ";
 					for(int i(0); i< Nd; i++){
-						cout << sqrt(x_variance(i)) << ", ";
+						cout << sqrt(x_variance(i)) << " ";
 					}
 					cout << "). F_Variance: " << variance(); 
 					cout << " Mean: " << fmean() << " with f(x) =  "<< (*f)(xi) << endl;
 				}
+				*/
 			}		
 		}
 		return accept;
@@ -174,22 +233,9 @@ public:
 		while(counter<maxstep){
 			bool accept = iterate();
 			if(accept){
-				if(counter==bperiod){
-					burnin=false;
-					//varold = fmean();  //
-					varold = variance();
-					cout << "Burnin Variance: " << varold << endl;
-
-					// Here it resets the recorded values of function and points visited
-					// with the burn-in points stored in an additional vector.
-					xburn = xvals;
-					for(int i(0); i<Nd; i++){
-						xvals[i].clear();
-					}
-					fsum = 0;
-					fsq = 0;
+				if(counter==burntime){
 				}
-				else if(counter>=(2*bperiod)){
+				else if(counter>=(2*burntime)){
 					// The width of the window for the moving average over which the variance is taken,
 					// is equal to the burn-in period. This means that the variance can only be assessed once
 					// a full period of values is recorded and the variance can be compared properly.
@@ -199,12 +245,14 @@ public:
 					//if(sqrt(v)<10){
 					if(abs(sqrt(varold)-sqrt(v))/sqrt(abs(v))<eps){
 						cout << "Converged with variance: " << v << " in " << counter << " steps. " <<  endl;
+						converged = true;
 						return 0;
 					}
 					varold = v;
 				}		
 			}
 		}
+		converged = false;
 		cout << "Maximum steps reached: " << counter <<  endl;
 		return 0;	
 	}
@@ -213,16 +261,16 @@ public:
 		int numvals = sig_period;
 		double mean = ((burnin)?xsum_b[i]:xsum[i])/double(numvals);
 		double meansq = ((burnin)?xsq_b[i]:xsq[i])/double(numvals);
-		return meansq - (mean*mean);;
+		return meansq - (mean*mean);
 	}
 
 	double variance() {
-		double M = double(bperiod);
+		double M = double(burntime);
 		return (fsq/M)- pow((fsum/M), 2);
 	}
 	
 	double fmean(){
-		double M = double(bperiod);
+		double M = double(burntime);
 		return fsum/M;
 	}
 
