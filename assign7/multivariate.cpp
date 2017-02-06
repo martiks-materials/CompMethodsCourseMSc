@@ -24,10 +24,10 @@ int main() {
 	// This is the master 'distributor' which is used to seed the generators of all 
 	// Markov chains and also decide the initial points of each chain
 	Ran distributor;
-	distributor.seed(42); 
+	distributor.seed(4242); 
 	vec funcmaxes, startsig = {5, 5};
 	vecvec xmaxes;
-	int numchains(10), numcon(0), sig_period(1E2), check_period(1E2),  burn(1E4), maxi(1E6), Ndim(2);
+	int numchains(12), numcon(0), totvals(0), totstep(0), sig_period(1E2), check_period(1E2),  burn(1E4), maxi(1E6), Ndim(2);
 	double epsig(1E-8), range(1.0);
 	for(int i(0); i< Ndim; i++){
 		xmaxes.push_back({});
@@ -64,8 +64,10 @@ int main() {
 			outfile2 << endl;
 		}
 		cout << "Max(f(x)) =  " << Marko.maxf << " at (" << Marko.xmax[0] << ", " << Marko.xmax[1] << " )" <<  endl;
-		cout << Marko.accepts << " steps with " << Marko.func_evals/2 << " (times 2) function evaluations" << endl;
+		cout << Marko.accepts << " steps with " << Marko.func_evals << " function evaluations" << endl;
 		numcon += (Marko.converged)?1:0;
+		totstep += Marko.counter;
+		totvals += Marko.func_evals;
 		funcmaxes.push_back(Marko.maxf);
 		for(int i(0) ; i<Ndim; i++){	
 			xmaxes[i].push_back(Marko.xmax[i]);
@@ -80,6 +82,7 @@ int main() {
 		}
 	}
 	cout << endl << numcon << "/" << numchains << " converged." << endl;
+	cout << totstep << " steps with " << totvals << " function evaluations." << endl; 
 	outfile1.close();
 	outfile2.close();
 	return 0;

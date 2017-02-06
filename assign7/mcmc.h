@@ -34,7 +34,7 @@ private:
 
 	func f;
 	vec xi, sig;
-	double  eps, stored, fsum, fsq;
+	double  eps, stored, fsum, fsq, old;
 	bool extra, burnin, fixprop;
 	int seed;
 	Ran myran;

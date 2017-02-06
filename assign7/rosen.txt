@@ -1,0 +1,73 @@
+__________________________________________________________
+Markov Chain 1 starting at (-0.828685, -0.480474) 
+Autocorrelation func. r(8) = 0.0121617  0.0453367  
+Burn-in time = 100
+Converged with variance: 52521 in 98509 steps. 
+Max(f(x)) =  999.999 at (1.00296, 1.0089 ) with variance 52521
+98509 steps with  1214877 function evaluations
+__________________________________________________________
+Markov Chain 2 starting at (0.826657, 0.841455) 
+Autocorrelation func. r(9) = 0.0408283  0.0176849  
+Burn-in time = 100
+Converged with variance: 36046.3 in 260997 steps. 
+Max(f(x)) =  999.999 at (0.999147, 0.995552 ) with variance 36046.3
+260997 steps with  4466207 function evaluations
+__________________________________________________________
+Markov Chain 3 starting at (-0.829402, 0.645955) 
+Autocorrelation func. r(12) = 0.0327195  0.00226334  
+Burn-in time = 100
+Converged with variance: 53827 in 108562 steps. 
+Max(f(x)) =  999.999 at (1.00138, 0.999841 ) with variance 53827
+108562 steps with  1670123 function evaluations
+__________________________________________________________
+Markov Chain 4 starting at (0.661056, -0.70845) 
+Autocorrelation func. r(24) = 0.00802872  0.00710329  
+Burn-in time = 100
+Converged with variance: 44092.5 in 5979 steps. 
+Max(f(x)) =  999.833 at (0.813293, 0.625049 ) with variance 44092.5
+5979 steps with  140059 function evaluations
+__________________________________________________________
+Markov Chain 5 starting at (-0.534594, 0.536681) 
+Autocorrelation func. r(17) = 0.027458  0.04399  
+Burn-in time = 100
+Converged with variance: 45071.8 in 975312 steps. 
+Max(f(x)) =  1000 at (1.00772, 1.01588 ) with variance 45071.8
+975312 steps with  13025369 function evaluations
+__________________________________________________________
+Markov Chain 6 starting at (-0.533763, -0.581359) 
+Autocorrelation func. r(6) = 0.00952043  0.0193473  
+Burn-in time = 100
+Converged with variance: 38750.1 in 163578 steps. 
+Max(f(x)) =  1000 at (1.00135, 1.00271 ) with variance 38750.1
+163578 steps with  3001490 function evaluations
+__________________________________________________________
+Markov Chain 7 starting at (0.373728, -0.990325) 
+Autocorrelation func. r(19) = 0.0253304  0.0455816  
+Burn-in time = 100
+Converged with variance: 54785.1 in 48328 steps. 
+Max(f(x)) =  999.993 at (0.930289, 0.861274 ) with variance 54785.1
+48328 steps with  1434881 function evaluations
+__________________________________________________________
+Markov Chain 8 starting at (-0.0594204, 0.164461) 
+Autocorrelation func. r(8) = 0.0215549  0.0315834  
+Burn-in time = 100
+Converged with variance: 50222.4 in 11699 steps. 
+Max(f(x)) =  999.961 at (0.82473, 0.671171 ) with variance 50222.4
+11699 steps with  145945 function evaluations
+__________________________________________________________
+Markov Chain 9 starting at (-0.924079, -0.83681) 
+Autocorrelation func. r(55) = 0.0481975  0.0172272  
+Burn-in time = 300
+Converged with variance: 38501.7 in 39995 steps. 
+Max(f(x)) =  999.995 at (0.996986, 0.986863 ) with variance 38501.7
+39995 steps with  1664676 function evaluations
+__________________________________________________________
+Markov Chain 10 starting at (-0.333392, 0.842633) 
+Autocorrelation func. r(19) = 0.0109617  0.0158349  
+Burn-in time = 200
+Converged with variance: 24260.8 in 20538 steps. 
+Max(f(x)) =  999.989 at (1.09142, 1.19601 ) with variance 24260.8
+20538 steps with  192987 function evaluations
+Largest Function maximum: 1000 at (1.00135, 1.00271) 
+10/10 converged.
+1733497 total steps needed with 26956614 function evaluations.

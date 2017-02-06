@@ -13,6 +13,7 @@ MarkovChain::MarkovChain(func fn, int dim, vec init, int b, int seed, vec sig_in
 	myran.seed(seed);
 	xi = init;	
 	sig = sig_init;
+	old = (*f)(xi);
 
 	// Variables for Gaussian Distribution via Box-Muller or for multivariate
 	// normal distribution.
@@ -25,7 +26,7 @@ MarkovChain::MarkovChain(func fn, int dim, vec init, int b, int seed, vec sig_in
 	fvalcount = 0;
 	maxstep = maxs;
 	minstep = mins;
-	func_evals = 0;
+	func_evals = 1;
 	accepts = 0;
 	burntime = b;
 	burnin = true;
@@ -34,7 +35,7 @@ MarkovChain::MarkovChain(func fn, int dim, vec init, int b, int seed, vec sig_in
 	fsq = 0;
 	maxf = 0;
 	xmax = xi;
-	eps = (multivar)?(epsy*10):epsy;
+	eps = epsy;
 	sig_period = sigper;
 	check_period=checkper;
 	fixprop = fix;
@@ -158,8 +159,8 @@ bool MarkovChain::iterate() {
 	// Metropolis Algorithm Step: Calculated the relative value of the function which works 
 	// as a probability if less than unity, causing automatic acceptance
 	double quant = (*f)(x_temp);
-	double alpha = quant/(*f)(xi);
-	func_evals += 2;
+	double alpha = quant/old;
+	func_evals++;
 	if(alpha>1.){
 		xi = x_temp;
 		accept = true;
@@ -170,7 +171,7 @@ bool MarkovChain::iterate() {
 		xi = (beta<alpha)?x_temp:xi;
 		accept = (beta<alpha)?true:false;
 	}
-
+	old = (accept)?quant:old;
 	// Now the function assesses convergence and updates member variables 
 	if(accept){
 		counter++;
@@ -243,10 +244,10 @@ bool MarkovChain::iterate() {
 							cout << rk[i] << "  ";  
 						}
 						cout << endl;
-						burnin=false;
+						cout << "Burn-in time = " << counter << endl;
 						burntime = counter;
-						varold = variance();
-	
+						varold = variance();	
+						burnin=false;
 						// Here it resets the recorded values of function and points visited
 						// with the burn-in points stored in an additional vector. This is so 
 						// the burn-in values and the non-burn-in values can be outputted to
@@ -265,8 +266,8 @@ bool MarkovChain::iterate() {
 				// This condition describes the case if the auto-correlation function does not reduce
 				// sufficiently and the maximum burn-in period is reached.
 
-				burnin=false;
 				varold = variance();
+				burnin=false;
 
 				// Here it resets the recorded values of function and points visited
 				// with the burn-in points stored in an additional vector. This is so 
@@ -323,9 +324,9 @@ bool MarkovChain::iterate() {
 			fvals.push_back(quant);
 			fvalcount++;
 			// Remove the value from fsum so we keep the window of convergence assessment moving
-			double removed = (counter > (2*burntime))?fvals[counter-1-2*burntime]:0;
-			fsum -= (counter > (2*burntime))?removed:0;
-			fsq -= (counter > (2*burntime))?(removed*removed):0;
+			double removed = (counter > (sig_period+burntime))?fvals[counter-1-sig_period-burntime]:0;
+			fsum -= (counter > (sig_period+burntime))?removed:0;
+			fsq -= (counter > (sig_period + burntime))?(removed*removed):0;
 			fsum += quant;
 			fsq += quant*quant;
 			if(quant > maxf){
@@ -360,7 +361,7 @@ int MarkovChain::optimise() {
 	while(counter<maxstep){
 		bool accept = iterate();
 		if(accept){
-			if(counter>=(2*burntime)){
+			if((counter>=(sig_period+burntime))/*&&(counter%burntime==0)*/){
 				// The width of the window is the same as the burn-in-period for the moving average over 
 				// which the variance is taken, is equal to the burn-in period. This means that the 
 				// variance can only be assessed once  a full period of values is recorded and the 
@@ -397,7 +398,7 @@ double MarkovChain::x_variance(int i) {
 
 double MarkovChain::variance() {
 	// Returns the variance of the function evaluations over the period 'burntime'.
-	double M = double(burntime);
+	double M = (burnin)?double(burntime):double(sig_period);
 	return (fsq/M)- pow((fsum/M), 2);
 }
 
@@ -417,7 +418,7 @@ double MarkovChain::autocorr(int k, int comp){
 }
 
 double MarkovChain::covariance(int i, int j) {
-	// Produces the covariance matrix of a windwo of particular x values taken over
+	// Produces the covariance matrix of a window of particular x values taken over
 	// 'sig_period' steps.
 	double M = double(sig_period);
 	// Number of vals;

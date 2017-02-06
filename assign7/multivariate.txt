@@ -1,0 +1,88 @@
+_________________________________________________________
+Markov Chain 1 (Multivariate Prop. Function) starting at (0.0612069, -0.767179) 
+Autocorrelation func. r(9) = 0.00184018  0.0241922  
+Burn-in time = 100
+Converged with variance: 24914.9 in 19609 steps. 
+Max(f(x)) =  999.998 at (0.987716, 0.980042 )
+19609 steps with 173844 function evaluations
+__________________________________________________________
+Markov Chain 2 (Multivariate Prop. Function) starting at (-0.0682451, 0.676266) 
+Autocorrelation func. r(12) = 0.0378571  0.0242955  
+Burn-in time = 100
+Converged with variance: 43785.5 in 302561 steps. 
+Max(f(x)) =  1000 at (1.00821, 1.01632 )
+302561 steps with 2600982 function evaluations
+__________________________________________________________
+Markov Chain 3 (Multivariate Prop. Function) starting at (0.932907, -0.884545) 
+Autocorrelation func. r(10) = 0.00122152  0.00457475  
+Burn-in time = 100
+Converged with variance: 41024 in 72068 steps. 
+Max(f(x)) =  1000 at (0.980491, 0.960887 )
+72068 steps with 757031 function evaluations
+__________________________________________________________
+Markov Chain 4 (Multivariate Prop. Function) starting at (0.816566, -0.243461) 
+Autocorrelation func. r(48) = 0.0273468  0.0321286  
+Burn-in time = 100
+Converged with variance: 45790.9 in 11292 steps. 
+Max(f(x)) =  999.997 at (0.957622, 0.913142 )
+11292 steps with 117320 function evaluations
+__________________________________________________________
+Markov Chain 5 (Multivariate Prop. Function) starting at (0.00951582, 0.864965) 
+Autocorrelation func. r(18) = 0.0437205  0.0103859  
+Burn-in time = 100
+Converged with variance: 49080.9 in 79735 steps. 
+Max(f(x)) =  1000 at (0.998037, 0.994809 )
+79735 steps with 899687 function evaluations
+__________________________________________________________
+Markov Chain 6 (Multivariate Prop. Function) starting at (-0.25578, -0.508917) 
+Autocorrelation func. r(8) = 0.0365539  0.0219942  
+Burn-in time = 100
+Converged with variance: 50048.9 in 209852 steps. 
+Max(f(x)) =  999.998 at (1.04417, 1.08914 )
+209852 steps with 2638829 function evaluations
+__________________________________________________________
+Markov Chain 7 (Multivariate Prop. Function) starting at (0.233978, 0.391779) 
+Autocorrelation func. r(42) = 0.0422759  0.0351897  
+Burn-in time = 100
+Converged with variance: 47882.5 in 37074 steps. 
+Max(f(x)) =  999.992 at (1.04828, 1.09114 )
+37074 steps with 780600 function evaluations
+__________________________________________________________
+Markov Chain 8 (Multivariate Prop. Function) starting at (-0.727911, -0.723639) 
+Autocorrelation func. r(27) = 0.0246423  0.0349248  
+Burn-in time = 100
+Converged with variance: 52119.4 in 132975 steps. 
+Max(f(x)) =  999.998 at (1.04371, 1.09017 )
+132975 steps with 1101453 function evaluations
+__________________________________________________________
+Markov Chain 9 (Multivariate Prop. Function) starting at (-0.787911, 0.815044) 
+Autocorrelation func. r(60) = 0.0298916  0.0394567  
+Burn-in time = 100
+Converged with variance: 33941 in 267619 steps. 
+Max(f(x)) =  1000 at (0.982651, 0.964725 )
+267619 steps with 4927481 function evaluations
+__________________________________________________________
+Markov Chain 10 (Multivariate Prop. Function) starting at (-0.486885, 0.699383) 
+Autocorrelation func. r(31) = 0.0352653  0.0459924  
+Burn-in time = 100
+Converged with variance: 44182.5 in 254644 steps. 
+Max(f(x)) =  999.998 at (0.981112, 0.96605 )
+254644 steps with 6317175 function evaluations
+__________________________________________________________
+Markov Chain 11 (Multivariate Prop. Function) starting at (0.660378, -0.199411) 
+Autocorrelation func. r(60) = 0.0207407  0.044513  
+Burn-in time = 100
+Converged with variance: 60944 in 45608 steps. 
+Max(f(x)) =  999.999 at (1.01022, 1.01744 )
+45608 steps with 447337 function evaluations
+__________________________________________________________
+Markov Chain 12 (Multivariate Prop. Function) starting at (0.482484, 0.877675) 
+Autocorrelation func. r(54) = 0.0295734  0.0192713  
+Burn-in time = 100
+Converged with variance: 29214.9 in 355696 steps. 
+Max(f(x)) =  1000 at (1.00582, 1.00989 )
+355696 steps with 6766767 function evaluations
+Largest Function maximum: 1000 at (1.00821, 1.01632) 
+12/12 converged.
+1788733 steps with 27528506 function evaluations.
+

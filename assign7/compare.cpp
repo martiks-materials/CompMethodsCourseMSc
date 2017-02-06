@@ -30,7 +30,8 @@ int main() {
 	distributor.seed(42); 
 	vec funcmaxes1, funcmaxes2, startsig = {5, 5};
 	vecvec xmaxes1, xmaxes2;
-	int numchains(10), numcon1(0), numcon2(0), numval1(0), numval2(0), sig_period(1E2), check_period(1E2),  burn(1E4), maxi(1E6), Ndim(2);
+	int numchains(12), sig_period(1E2), check_period(1E2),  burn(1E4), maxi(1E6), Ndim(2);
+	int  numcon1(0), numcon2(0), numval1(0), numval2(0), numstep1(0), numstep2(0);
 	double epsig(1E-8), range(1.0);
 	for(int i(0); i< Ndim; i++){
 		xmaxes1.push_back({});
@@ -52,8 +53,9 @@ int main() {
 		MarkovChain Marko1 = {rosenbrock, Ndim, xinit1, burn, see, startsig, epsig, maxi, 10, true, sig_period, check_period, false};
 		Marko1.optimise();
 		cout << "Max(f(x)) =  " << Marko1.maxf << " at (" << Marko1.xmax[0] << ", " << Marko1.xmax[1] << " )" <<  " with variance " << Marko1.variance() << endl;
-		cout << Marko1.accepts << " out of " << Marko1.func_evals/2 << " (times 2) function evaluations" << endl;
+		cout << Marko1.accepts << " steps with " << Marko1.func_evals << " function evaluations" << endl;
 		numval1 += Marko1.func_evals;	
+		numstep1 += Marko1.counter;
 	
 		
 		cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ __" << endl;	
@@ -61,8 +63,9 @@ int main() {
 		MarkovChain Marko2 = {rosenbrock, Ndim, xinit2, burn, see, startsig, epsig, maxi, 10, false, sig_period, check_period, false};
 		Marko2.optimise();
 		cout << "Max(f(x)) =  " << Marko2.maxf << " at (" << Marko2.xmax[0] << ", " << Marko2.xmax[1] << " )" <<  " with variance " << Marko2.variance() << endl;
-		cout << Marko2.accepts << " out of " << Marko2.func_evals/2 << " (times 2) function evaluations" << endl;
-		numval2 += Marko2.func_evals;	
+		cout << Marko2.accepts << " steps with " << Marko2.func_evals << "  function evaluations" << endl;
+		numval2 += Marko2.func_evals;
+		numstep2 += Marko2.counter;	
 	
 		numcon1 += (Marko1.converged)?1:0;
 		numcon2 += (Marko2.converged)?1:0;
@@ -85,6 +88,7 @@ int main() {
 		}
 	}
 	cout << endl << numval1 << " function evaluations." << endl;
+	cout << numstep1 << " steps taken." << endl;
 	cout << numcon1 << "/" << numchains << " converged." << endl;
 	
 	cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ __" << endl;	
@@ -96,6 +100,7 @@ int main() {
 		}
 	}
 	cout << endl << numval2 << " function evaluations." << endl;
+	cout << numstep2 << " steps taken." << endl;
 	cout << numcon2 << "/" << numchains << " converged." << endl;
 	return 0;
 }
