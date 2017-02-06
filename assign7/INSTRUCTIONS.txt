@@ -4,10 +4,10 @@ Contents:
 
 rosen.cpp        - Program which answers question 1 by mapping the Rosenbrock function 
 	           using MCMC methods and produces data files of the function evaluations.
-compare.cpp      - Program which answers question 2 by comparing the number of function 
+compare.cpp      - Program which answers question 2 by comparing numbers of function evaluations 
 		   and accepted points between the case of fixing the proposal distribution
 		   after burn-in period and case of allowing it to vary after burn-in
-multivariate.cpp - Program which attempts to answer question three by using the feature in
+multivariate.cpp - Program which attempts to answer question 3 by using the feature in
 		   Markov Chain class which uses a Multivariate Gaussian distribution opposed
 		   to a product of single independent Gaussians. Outputs files for plotting.
 mcmc.h           - Class declaration for the MarkovChain class used to explore and optimise
