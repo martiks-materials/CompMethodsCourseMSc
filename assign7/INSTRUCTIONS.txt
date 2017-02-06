@@ -1,0 +1,46 @@
+Computational Methods Assignment 7 Folder - Markov Chain Monte Carlo Optimisation/Maximisation
+
+Contents:
+
+rosen.cpp        - Program which answers question 1 by mapping the Rosenbrock function 
+	           using MCMC methods and produces data files of the function evaluations.
+compare.cpp      - Program which answers question 2 by comparing the number of function 
+		   and accepted points between the case of fixing the proposal distribution
+		   after burn-in period and case of allowing it to vary after burn-in
+multivariate.cpp - Program which attempts to answer question three by using the feature in
+		   Markov Chain class which uses a Multivariate Gaussian distribution opposed
+		   to a product of single independent Gaussians. Outputs files for plotting.
+mcmc.h           - Class declaration for the MarkovChain class used to explore and optimise
+mcmc.cpp	 - Contains class member functions for the MarkovChain class
+rand.h           - Random number generator from assignment 3 for uniform deviate generation
+Makefile         - Compiles the rosen.cpp, compare.cpp, and multivariate.cpp programs
+report7.pdf      - Report describing methods and discussing displayed results
+marko.p          - Contains instructions for gnuplot to view the Marko chain and burn-in data
+		   for answers to question 1 and 3
+%.txt            - Contains the output to the terminal of the three main files rosen.cpp, 
+		   compare.cpp, and multivariate.cpp 
+
+
+Instructions for assign7 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+
+Using the Makefile provided, type 'make' into the terminal. This will compile
+'rosen.cpp', 'compare.cpp' and 'multivariate.cpp' providing executables 'rosen.x',
+'compare.x' and 'multivariate.x'.
+
+To run these, enter './rosen.x' into the terminal, and wait for outputted results,
+then enter './compare.x' into the terminal, and wait for the outputted results,
+then enter '/multivariate.x' into the terminal and wait for the outputted results.
+
+The outputs are included in hard copy in the .txt files for easier access.
+Additionally, '.dat' files will be produced containing the Markov Chain and burn-in
+data for 'rosen.x' and 'multivariate.x'.
+
+OBTAINING PNG FILES FROM REPORT:
+To plot and obtain the graphs from  gnuplot (assuming gnuplot is installed), type 'gnuplot marko.p'
+into the terminal. This will produce individual '.png' files which are included in the report PDF.
+
+
+- Martik Aghajanian, Cohort 8.
+

@@ -1,3 +1,5 @@
+// Class member functions for the MarkovChain class which maximises and explores
+// a function given initial parameters.
 #include <iostream>
 #include <vector>
 #include <cmath>
