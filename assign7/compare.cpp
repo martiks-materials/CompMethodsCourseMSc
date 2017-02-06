@@ -5,9 +5,7 @@
 // This computes the number of function evaluations of the Markov
 // Chain Monte Carlo method for mapping and optimising a function, for
 // both a fixed proposal function and a proposal function which varies
-// after the burn-in period. This can be applied to a proposal function
-// which is a product of independent Gaussians or a multivariate normal
-// distribution.
+// after the burn-in period.
 #include <iostream>
 #include <fstream>
 #include <cmath>

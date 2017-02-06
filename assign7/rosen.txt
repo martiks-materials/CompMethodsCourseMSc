@@ -68,6 +68,21 @@ Burn-in time = 200
 Converged with variance: 24260.8 in 20538 steps. 
 Max(f(x)) =  999.989 at (1.09142, 1.19601 ) with variance 24260.8
 20538 steps with  192987 function evaluations
+__________________________________________________________
+Markov Chain 11 starting at (-0.0786896, 0.213033) 
+Autocorrelation func. r(33) = 0.0245023  0.0252712  
+Burn-in time = 200
+Converged with variance: 55851.5 in 25416 steps. 
+Max(f(x)) =  999.991 at (0.975854, 0.961261 ) with variance 55851.5
+25416 steps with  775014 function evaluations
+__________________________________________________________
+Markov Chain 12 starting at (0.298331, -0.410958) 
+Autocorrelation func. r(8) = 0.00132772  0.0472973  
+Burn-in time = 100
+Converged with variance: 43279.8 in 128902 steps. 
+Max(f(x)) =  999.995 at (0.958771, 0.913177 ) with variance 43279.8
+128902 steps with  2129798 function evaluations
 Largest Function maximum: 1000 at (1.00135, 1.00271) 
-10/10 converged.
-1733497 total steps needed with 26956614 function evaluations.
+12/12 converged.
+1887815 total steps needed with 29861426 function evaluations.
+

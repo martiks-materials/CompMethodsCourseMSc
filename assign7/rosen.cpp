@@ -26,10 +26,16 @@ int main() {
 	// Markov chains and also decide the initial points of each chain
 	Ran distributor;
 	distributor.seed(424242); 
+
+	// Vector 'funcmaxes' for storing the maximum points of each of the Markov chains
 	vec funcmaxes, startsig = {5, 5};
 	vecvec xmaxes;
-	int numchains(10), numcon(0), sig_period(1E2), check_period(1E2), burn(1E4), maxi(1E6), Ndim(2);
-	int totstep(0), totvals(0);
+	int numchains(12),  sig_period(1E2), check_period(1E2), burn(1E4), maxi(1E6), Ndim(2);
+
+	// Counters for the total steps, total function evaluations and number of converged MC's
+	int totstep(0), totvals(0), numcon(0);
+	
+	// Convergence tolerance and initial point range.
 	double epsig(1E-8), range(1.0);
 	for(int i(0); i< Ndim; i++){
 		xmaxes.push_back({});
