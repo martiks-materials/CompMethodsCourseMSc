@@ -87,7 +87,6 @@ public:
 				// If the values of a and c are the same then the inverse quadratic
 				// interpolation fails and the secant method (finite difference Newton
 				// Raphson Method) must be used to estimate the root linearly.
-				cout << "secant" << endl;
 				x = b -fb*(b-c)/(fb-fc);
 				pq0 = x-b;
 			}
@@ -110,7 +109,6 @@ public:
 			}	
 
 			if ((abs(x-b) <= 0.75*abs(b-c))&&allowed){
-				cout << "brent" << endl;
 				// Provided that the addition to the current best guess does not exceed 3/4 the
 				// way between the best guess and the contrapoint, and that the previous conditions
 				// allow it, the inverse quadratic interpolation step is accepted and the values 
@@ -156,7 +154,6 @@ public:
 			// either the function is within machine accuracy of zero, or that the region of bracketing between
 			// the current best guess and 'contrapoint' is below a certain tolerance.
 			if((0.5*abs(b-c)<tol)||abs(fb)<1E-16){
-				cout << "Converged in " << count << " steps" << endl;
 				converged = true;
 			}
 			else if(count > maxsteps) {
@@ -167,6 +164,5 @@ public:
 		// The bracketing value which has the lowest absolute function value is outputted.
 		return (abs(fb)<abs(fc))?b:c;
 	}
-
 
 };

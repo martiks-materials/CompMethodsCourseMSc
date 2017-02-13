@@ -22,22 +22,24 @@ int main(){
 	int maxi(10000);
 	// The bisection method is implemented here, with the starting points for the
 	// 
-	vec xinit1 = {2.0, 2.5};
+	vec xinit1 = {2.0, 2.25};
 	Bisector Splisect1 = {oldspline, xinit1, epsilon, maxi};
 	double result1 = Splisect1.operate();
-	vec xinit2 = {2.75, 3.0};
+	vec xinit2 = {2.75, 2.9};
 	Bisector Splisect2 = {oldspline, xinit2, epsilon, maxi};
 	double result2 = Splisect2.operate();
-	std::cout << "Bisection Root 1: " << std::setprecision(9)<< result1 << endl;
-	std::cout << "Bisection Root 2: " << std::setprecision(9) << result2 << endl;
+	std::cout << "Bisection Root 1: " << std::setprecision(9) << result1;
+	std::cout << " in " << Splisect1.count << " iterations." << endl;
+	std::cout << "Bisection Root 2: " << result2;
+	std::cout << " in " << Splisect2.count << " iterations." << endl;
 	// Brent's Method
-	vec xinit3 = {2.0, 2.5};
-	BrentMethod Sprent1 = {oldspline, xinit3, epsilon, maxi, delta};
+	BrentMethod Sprent1 = {oldspline, xinit1, epsilon, maxi, delta};
 	double result3 = Sprent1.operate();
-	vec xinit4 = {2.75, 3.0}; 
-	BrentMethod Sprent2 = {oldspline, xinit4, epsilon, maxi, delta};
+	BrentMethod Sprent2 = {oldspline, xinit2, epsilon, maxi, delta};
 	double result4 = Sprent2.operate();
-	std::cout << "Brent Method Root 1: " << result3 << endl;
-	std::cout << "Brent Method Root 2: " << result4 << endl;
+	std::cout << "Brent Method Root 1: " << result3;
+	std::cout << " in " << Sprent1.count << " iterations." << endl;
+	std::cout << "Brent Method Root 2: " << result4;
+	std::cout << " in " << Sprent2.count << " iterations." << endl;
 	return 0;
 }
