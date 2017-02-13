@@ -88,7 +88,6 @@ public:
 		delta = del;
 		maxsteps=maxstep;
 		converged = false;
-
 		count = 0;
 		bisect = false;
 	}
