@@ -8,9 +8,8 @@
 #include <cmath>
 #include <vector>
 #include "splining.h"
-#include "bisect.h"
+#include "rootmethods.h"
 #include <iomanip>
-#include "brent.h"
 
 int main(){
 	// The range of the x-data from the spline is from 'xmin' to 'xmax'
@@ -29,17 +28,17 @@ int main(){
 	Bisector Splisect2 = {oldspline, xinit2, epsilon, maxi};
 	double result2 = Splisect2.operate();
 	std::cout << "Bisection Root 1: " << std::setprecision(9) << result1;
-	std::cout << " in " << Splisect1.count << " iterations." << endl;
+	std::cout << " in " << Splisect1.count << " iterations." << std::endl;
 	std::cout << "Bisection Root 2: " << result2;
-	std::cout << " in " << Splisect2.count << " iterations." << endl;
+	std::cout << " in " << Splisect2.count << " iterations." << std::endl;
 	// Brent's Method
 	BrentMethod Sprent1 = {oldspline, xinit1, epsilon, maxi, delta};
 	double result3 = Sprent1.operate();
 	BrentMethod Sprent2 = {oldspline, xinit2, epsilon, maxi, delta};
 	double result4 = Sprent2.operate();
 	std::cout << "Brent Method Root 1: " << result3;
-	std::cout << " in " << Sprent1.count << " iterations." << endl;
+	std::cout << " in " << Sprent1.count << " iterations." << std::endl;
 	std::cout << "Brent Method Root 2: " << result4;
-	std::cout << " in " << Sprent2.count << " iterations." << endl;
+	std::cout << " in " << Sprent2.count << " iterations." << std::endl;
 	return 0;
 }
