@@ -1,0 +1,26 @@
+Computational Methods Assignment 8 Folder - Root Finding
+
+Contents:
+
+splisect.cpp      - Program which finds the two roots of the interpolator function using
+		    both Brent's method and the bisection method to compare the two methods. 
+splining.cpp      - Contains the cubic spline interpolator of the data in Assignment 3
+rootmethods.cpp   - Contains the Member functions of the Bisector and BrentMethod classes
+		    which perform the root finding algorithms.
+splining.h        - Header file for the cubic spline interpolator related functions.
+rootmethods.h     - Class declaration of the Bisector and BrentMethod classes which are
+		    used to find the root of the interpolating function.
+Makefile          - Compiles the splisect.cpp program.
+report8.pdf       - Report describing theory and addressing the questions in Assignment 8.
+ 
+
+Instructions for assign8 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+Using the Makefile provided, type 'make' into the terminal. This will compile
+'splisect.cpp', 'splining.cpp', and 'rootmethods.cpp', providing executable
+'splisect.x'. To run this, enter './splisect.x' into the terminal, and the results 
+used in report8.pdf will be outputted.
+
+- Martik Aghajanian, Cohort 8.
+
