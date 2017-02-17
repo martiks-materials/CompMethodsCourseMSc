@@ -14,7 +14,7 @@ Makefile       - Compiles the various files to obtain main executable.
 intgraph.p     - Converts the data files into graphs for the report.
 report9.pdf    - Contains results, plots and discussion of the shooting method.
 
-Instructions for assign4 folder for Computational Methods (TSM CDT):
+Instructions for assign9 folder for Computational Methods (TSM CDT):
 
 COMPILING:
 Using the Makefile provided, enter 'make' into the terminal.
