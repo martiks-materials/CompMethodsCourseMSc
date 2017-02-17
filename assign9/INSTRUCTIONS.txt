@@ -1,0 +1,29 @@
+Computational Methods Assignment 9 Folder - Shooting Method
+
+Contents:
+
+sniper.cpp     - Main program that implements the shooting method, producing appropriate data.
+brent.cpp      - Contains the BrentMethod class member functions used for root-finding.
+rk4.cpp        - Contains the RungeKutta4 class member functions used for ODE solving.
+specifics.cpp  - Contains the functions which wrap the Runge-Kutta boundary value.
+	       - problem into a root-finding problem.
+brent.h        - Class declaration for the BrentMethod class.
+rk4.h          - Class declaration for the RungeKutta45 class.
+specifics.h    - Function declarations used for answering question 1.
+Makefile       - Compiles the various files to obtain main executable.
+intgraph.p     - Converts the data files into graphs for the report.
+report9.pdf    - Contains results, plots and discussion of the shooting method.
+
+Instructions for assign4 folder for Computational Methods (TSM CDT):
+
+COMPILING:
+Using the Makefile provided, enter 'make' into the terminal.
+To use the executable, enter './sniper.x' into the terminal.
+This will produce the data files.
+
+PLOTTING:
+To view graphs, enter 'gnuplot intgraph.p' into the terminal.
+This will produce .png files.
+
+- Martik Aghajanian, Cohort 8.
+
