@@ -31,6 +31,12 @@ double func3(double x, double a) {
 		return 0;
 	}
 }
+
+double func4(double x, double a) {
+	// abs exponential
+	return exp(-a*abs(x));
+}
+
 int binaryflip( int inp, int maxpow){
 	int result = 0;
 	for(int n=maxpow-1; n>=0; n--){
@@ -60,7 +66,7 @@ int main(){
 	// Sample the function
 	ofstream outfile2("space.dat");
 	for(int j=-N/2; j<N/2+1; j++){
-		double ffs = func3(double(j)*h, A);
+		double ffs = func1(double(j)*h, A);
 		outfile2 << h*j << right << setw(20) << ffs << endl;
 		f_x.push_back(ffs);
 	}
@@ -107,7 +113,7 @@ int main(){
 		swap(binum[start], binum[smallest]);
 		swap(f_x[start], f_x[smallest]);
 	}
-	*/
+
 	for (int index = 0; index < N; index++){
 		cout << f_x[index] << ' ';
 	}	
@@ -116,7 +122,7 @@ int main(){
 		cout << binum[index] << ' ';
 	}
 	cout << endl;
-
+	*/
 
 
 
@@ -143,7 +149,6 @@ int main(){
 				Fouri_temp.push_back( Fouri[2*j] +Wk*Fouri[2*j + 1] );
 			}
 			Fouri.resize(N_new);
-			cout << Fouri.size() << endl;
 			for(int j(0); j<N_new; j++){
 				Fouri[j] = Fouri_temp[j];
 			};
@@ -153,9 +158,14 @@ int main(){
 			F_kr.push_back(h*Fouri[0].real());
 			F_ki.push_back(h*Fouri[0].imag());
 		}
+	
+		else {
+			F_kr.push_back(-h*Fouri[0].real());
+                        F_ki.push_back(-h*Fouri[0].imag());
+		}
 	}
 	ofstream outfile("freq.dat");
-	for (int index = 0; index < N/2; index++){
+	for (int index = 0; index < N; index++){
 		outfile << setw(20) << left << (index+1-double(N)/2)*dk << setw(20) << left <<  F_kr[index]  << setw(20) << F_ki[index] << endl;
 	}	
 	outfile.close();
