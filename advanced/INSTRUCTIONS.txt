@@ -14,5 +14,7 @@ Makefile	- Compiles the .cpp programs
 plotter.p	- Plots the wavepacket motion using gnuplot
 grateplot.p	- Plots the image for animation of the double slit separation
 fourplot.p 	- Plots the FFTs of the functions outputted from the fourtet.cpp program
+vidgrate.sh	- Uses ffmpeg to create a video of the images produced from doubslit.cpp
+vidme.sh	- Uses ffmpeg to create a video of the wavepacket motion in motion.cpp
 
 
