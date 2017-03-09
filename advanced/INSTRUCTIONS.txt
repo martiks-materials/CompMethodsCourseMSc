@@ -1,6 +1,11 @@
 Computational Methods Advanced Topics: Fast Fourier Transforms
 
-Contents list:
+So the many data files plotted do not clog the directory, please enter the following into
+the terminal to create the directories for data dna image storing
+
+'mkdir Data images gratimag gratspace gratmom' 
+
+Contents list (after directory creation):
 
 fft_gen.cpp 	- Class member functions of the FFT class used to transform.
 fft_gen.h 	- Class declaration for the FFT class.

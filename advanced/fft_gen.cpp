@@ -58,7 +58,7 @@ void FFT::transform() {
 			f_x[j1] = tx;
 		}
 		k1 = i2;
-		// Bit reverse the labels of the data and reorder accordingly.
+		// Bit reverse the labels of the data.
 		while(k1 <= j1) {
 			j1 -= k1;
 			k1 >>= 1;
@@ -77,7 +77,7 @@ void FFT::transform() {
 			Fouri.push_back(f_x[j]);
 		}
 		int N_new = N;
-		// 
+		// Halve the dataset and perform complex multiplication on the odd part of the data.
 		for(int n=1;n<=nmax; n++) {
 			vecomp Fouri_temp;
 			N_new = int(pow(2,nmax-n));
