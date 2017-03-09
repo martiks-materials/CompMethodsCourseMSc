@@ -1,7 +1,7 @@
 Computational Methods Advanced Topics: Fast Fourier Transforms
 
 So the many data files plotted do not clog the directory, please enter the following into
-the terminal to create the directories for data dna image storing
+the terminal to create the directories for data and image storing
 
 'mkdir Data images gratimag gratspace gratmom' 
 
