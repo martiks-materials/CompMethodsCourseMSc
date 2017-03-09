@@ -1,4 +1,6 @@
 #pragma once
+#include <cmath>
+using namespace std;
 
 double func1(double x);
 

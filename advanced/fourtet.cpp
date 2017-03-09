@@ -1,3 +1,9 @@
+// Computational Methods - Advanced Topics: Fast Fourier Transforms
+//
+// This program determines the FFT for an handful of simple functions
+// and outputs the data into plottable files. The functions include
+// a gaussian, triangle, square and double square.
+
 #include <iostream>
 #include <cmath>
 #include <complex>
@@ -15,21 +21,23 @@ typedef vector<double> vec;
 
 
 int main() {
-	// Initiliase functions
+	// Initiliase functions and FFT objects, with 2^nm elements with a 
+	// physical length L of 40;
 	int nm = 10;
 	double L = 40.;
+
 	FFT gaussian = {nm, L, false};
 	FFT triangle = {nm, L, false};
 	FFT square = {nm, L, false};
 	FFT doubsquare = {nm, L, false};
 	gaussian.init_func(func1);
-	triangle.init_func(func2);
 	square.init_func(func3a);
 	doubsquare.init_func(func3b);
+	triangle.init_func(func2);
 	ofstream outfile1("space_gauss.dat");
-	ofstream outfile2("space_tri.dat");
 	ofstream outfile3a("space_squ.dat");
 	ofstream outfile3b("space_doub.dat");
+	ofstream outfile2("space_tri.dat");
 	for (int index = 0; index < gaussian.N; index++){
 		outfile1 << setw(20) << left << gaussian.posvec[index] << setw(20) << left <<  gaussian.f_x[index].real()  << setw(20) << gaussian.f_x[index].imag() << endl;
 		outfile2 << setw(20) << left << triangle.posvec[index] << setw(20) << left <<  triangle.f_x[index].real()  << setw(20) << triangle.f_x[index].imag() << endl;
@@ -41,6 +49,7 @@ int main() {
 	outfile3a.close();
 	outfile3b.close();
 
+	// Here the FFT is performed.
 	gaussian.transform();
 	triangle.transform();
 	square.transform();
@@ -56,6 +65,7 @@ int main() {
 		outfilef3a << setw(20) << left << square.wvec[index] << setw(20) << left <<  square.F_k[index].real()  << setw(20) << square.F_k[index].imag() << endl;
 		outfilef3b << setw(20) << left << doubsquare.wvec[index] << setw(20) << left <<  doubsquare.F_k[index].real()  << setw(20) << doubsquare.F_k[index].imag() << endl;
 	}	
+
 	outfilef1.close();
 	outfilef2.close();
 	outfilef3a.close();

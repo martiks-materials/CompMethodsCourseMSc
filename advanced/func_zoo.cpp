@@ -1,11 +1,12 @@
+// Functions for the FFT code to test on.
 #include <iostream>
-#include "func_zoo.h"
 #include <cmath>
 #include <complex>
 #include <vector>
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
+#include "func_zoo.h"
 
 double func1(double x){
         // Gaussian function.
@@ -15,12 +16,12 @@ double func1(double x){
 
 double func2(double x) {
         // Triangle function.
-	double a = 1;
+	double a = 1.;
         if((x>-a)&&(x<a)){
-                return a-abs(x);
+                return a - std::abs(x);
         }
         else {
-                return 0;
+                return 0.;
         }
 }
 
