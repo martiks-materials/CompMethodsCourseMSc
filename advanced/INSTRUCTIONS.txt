@@ -1,0 +1,18 @@
+Computational Methods Advanced Topics: Fast Fourier Transforms
+
+Contents list:
+
+fft_gen.cpp 	- Class member functions of the FFT class used to transform.
+fft_gen.h 	- Class declaration for the FFT class.
+motion.cpp      - Program to simulate the motion of a Gaussian wavepacket.
+fourtet.cpp	- Program to produce the FFT for several different functions.
+doubslit.cpp  	- Program to produce images for an animation of the double slit
+		  with increasing separation
+func_zoo.cpp	- Contains functions for applying the FFT and plotting in fourtet.cpp
+func_zoo.h 	- Header file for the functions for FFT in fourtet.cpp
+Makefile	- Compiles the .cpp programs
+plotter.p	- Plots the wavepacket motion using gnuplot
+grateplot.p	- Plots the image for animation of the double slit separation
+fourplot.p 	- Plots the FFTs of the functions outputted from the fourtet.cpp program
+
+
