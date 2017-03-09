@@ -16,5 +16,34 @@ grateplot.p	- Plots the image for animation of the double slit separation
 fourplot.p 	- Plots the FFTs of the functions outputted from the fourtet.cpp program
 vidgrate.sh	- Uses ffmpeg to create a video of the images produced from doubslit.cpp
 vidme.sh	- Uses ffmpeg to create a video of the wavepacket motion in motion.cpp
+Data		- Empty directory within which wavepacket data files are stored
+images		- Empty directory within which wavepacket images are stored
+gratimag	- Empty directoty within which double slit images are stored
+gratmom		- Empty directory within which double slit momentum data is stored
+gratspace	- Empty directory within which double slit space data is stored
+doubslit.mp4	- Previously made video in case the ffmpeg was not installed
+wavemotion.mp4	- Previously made video in cast the ffmpeg was not installed
 
+Instructions for use:
+
+Compilation:
+- Enter 'make' into the terminal to compile the .cpp files to obtain three executables
+
+Gaussian wavepacket:
+- Enter './motion.x' to output data of the wavepacket motion to a data file
+- Enter 'gnuplot plotter.p' to convert this data into a series of timestep images
+- Enter './vidme.sh' to convert this set of images into a video
+Note: ffmpeg must be installed and permissions of the video creation exe.
+To do this, enter:
+-> sudo apt-get install ffmpeg
+
+Double Slit:
+- Enter './doubslit.x' to output data of double slit with increasing slit separation into data files
+- Enter 'gnuplot grateplot.p' to convert this data into images
+- Enter './vidgrate.sh' to convert this set of images into a video
+
+Single Fourier Transform Images:
+- Enter './fourtet.x' to output data of the space and frequency domains into separate files for each function
+- Enter 'gnuplot fourplot.p' to convert these data files for each plot into four separate images that
+  display both frequency and space domains.
 
